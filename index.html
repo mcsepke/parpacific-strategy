@@ -168,6 +168,76 @@
 
   .dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; margin-bottom: 1.5rem; }
   .dash-card-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; margin-bottom: 1rem; }
+
+  /* ── SLIDE TABS ── */
+  .slide-tab-bar {
+    position: fixed; top: 60px; left: 0; right: 0; z-index: 90;
+    background: rgba(8,12,20,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 2rem; height: 52px; gap: 2px;
+  }
+  .slide-tab {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 16px; height: 100%;
+    border: none; background: transparent;
+    color: var(--text2); font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 500;
+    cursor: pointer; position: relative;
+    transition: color 0.2s; white-space: nowrap;
+  }
+  .slide-tab::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: transparent; transition: background 0.2s;
+  }
+  .slide-tab:hover { color: var(--text); }
+  .slide-tab.active { color: var(--text); }
+  .slide-tab.active::after { background: var(--rubrik-cyan); }
+  .slide-tab-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .slide-tab-num { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); }
+  .slide-nav-arrows { margin-left: auto; display: flex; gap: 4px; }
+  .slide-arrow {
+    width: 30px; height: 30px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text2); font-size: 0.9rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .slide-arrow:hover { color: var(--text); border-color: var(--rubrik-cyan); }
+  .slide-arrow:disabled { opacity: 0.3; cursor: default; }
+
+  /* ── SLIDES ── */
+  .slide-panel { display: none; padding-top: 112px; min-height: 100vh; animation: slideIn 0.3s ease; }
+  .slide-panel.active { display: block; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .slide-hero {
+    position: relative; overflow: hidden;
+    padding: 3.5rem 3rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .slide-hero-bg { position: absolute; inset: 0; z-index: 0; }
+  .slide-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+  .slide-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .slide-title { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.7rem; }
+  .slide-subtitle { font-size: 0.92rem; color: var(--text2); line-height: 1.7; max-width: 680px; margin-bottom: 1.5rem; }
+  .slide-body { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem 3rem; }
+
+  /* Cover */
+  .cover-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  @media(max-width:800px) { .cover-two-col { grid-template-columns: 1fr; } }
+  .cover-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .cover-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; }
+  .cover-stat-val { font-family: 'Syne', sans-serif; font-size: 1.7rem; font-weight: 800; color: var(--rubrik-cyan); line-height: 1; }
+  .cover-stat-label { font-size: 0.73rem; color: var(--text2); margin-top: 4px; }
+  .agenda-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .agenda-item { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1.1rem; cursor: pointer; transition: border-color 0.2s; }
+  .agenda-item:hover { border-color: var(--rubrik-cyan); }
+  .agenda-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text3); min-width: 20px; }
+  .agenda-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .agenda-label { font-weight: 500; font-size: 0.85rem; }
+  .agenda-sub { font-size: 0.73rem; color: var(--text2); margin-top: 1px; }
+  .agenda-badge { margin-left: auto; font-size: 0.66rem; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -181,8 +251,8 @@
     </div>
   </div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showView('presentation', this)">📊 Presentation</button>
-    <button class="nav-tab" onclick="showView('dashboard', this)">📈 Dashboard</button>
+    <button class="nav-tab active" onclick="showView('presentation', this)">📊 Cyber Resilience Strategy with Rubrik</button>
+    <button class="nav-tab" onclick="showView('dashboard', this)">📈 Business Review</button>
   </div>
   <div class="nav-badge">April 2025</div>
 </nav>
@@ -190,354 +260,314 @@
 <!-- ══════════════════════ PRESENTATION ══════════════════════ -->
 <div id="view-presentation" class="view active">
 
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">// CONFIDENTIAL · RUBRIK ACCOUNT REVIEW · PAR PACIFIC HOLDINGS</div>
-      <h1 class="hero-headline">Data Security<br><span>Portfolio Overview</span></h1>
-      <p class="hero-desc">A comprehensive review of Par Pacific's current Rubrik entitlements, utilization posture, and expansion opportunities across on-prem, cloud, M365, and identity workloads.</p>
-      <div class="hero-stats">
-        <div class="hero-stat"><div class="hero-stat-val">6</div><div class="hero-stat-label">On-Prem Clusters</div></div>
-        <div class="hero-stat"><div class="hero-stat-val">Enterprise Ed.</div><div class="hero-stat-label">On-Prem License</div></div>
-        <div class="hero-stat"><div class="hero-stat-val">1,000</div><div class="hero-stat-label">M365 Entitled Users</div></div>
-        <div class="hero-stat"><div class="hero-stat-val">100 TB</div><div class="hero-stat-label">Cloud Vault Licensed</div></div>
-        <div class="hero-stat"><div class="hero-stat-val">2 TB</div><div class="hero-stat-label">Cloud Entitlement</div></div>
+  <!-- Slide tab bar -->
+  <div class="slide-tab-bar" id="slide-tab-bar">
+    <button class="slide-tab active" onclick="showSlide(0)">
+      <span class="slide-tab-num">00</span>
+      <span class="slide-tab-dot" style="background:var(--rubrik-cyan)"></span>
+      Overview
+    </button>
+    <button class="slide-tab" onclick="showSlide(1)">
+      <span class="slide-tab-num">01</span>
+      <span class="slide-tab-dot" style="background:var(--rubrik-cyan)"></span>
+      On-Prem
+    </button>
+    <button class="slide-tab" onclick="showSlide(2)">
+      <span class="slide-tab-num">02</span>
+      <span class="slide-tab-dot" style="background:var(--accent3)"></span>
+      Cloud
+    </button>
+    <button class="slide-tab" onclick="showSlide(3)">
+      <span class="slide-tab-num">03</span>
+      <span class="slide-tab-dot" style="background:var(--gold)"></span>
+      Microsoft 365
+    </button>
+    <button class="slide-tab" onclick="showSlide(4)">
+      <span class="slide-tab-num">04</span>
+      <span class="slide-tab-dot" style="background:#f472b6"></span>
+      Identity
+    </button>
+    <div class="slide-nav-arrows">
+      <button class="slide-arrow" id="prev-btn" onclick="prevSlide()" disabled>&#8592;</button>
+      <button class="slide-arrow" id="next-btn" onclick="nextSlide()">&#8594;</button>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 0: OVERVIEW ── -->
+  <div class="slide-panel active" id="slide-0">
+    <div class="slide-hero" style="background: radial-gradient(ellipse 70% 80% at 80% 50%, rgba(0,100,204,0.13) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 10% 80%, rgba(124,58,237,0.09) 0%, transparent 60%);">
+      <div style="position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:0.18;"></div>
+      <div class="slide-content">
+        <div class="slide-eyebrow" style="color:var(--accent)">// CONFIDENTIAL · RUBRIK ACCOUNT REVIEW · PAR PACIFIC HOLDINGS</div>
+        <h1 class="slide-title">Data Security<br><span style="color:var(--rubrik-cyan)">Portfolio Overview</span></h1>
+        <p class="slide-subtitle">A comprehensive review of Par Pacific's current Rubrik entitlements, utilization posture, and expansion opportunities across on-prem, cloud, M365, and identity workloads.</p>
+
+        <div class="cover-two-col">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem;">Agenda</div>
+            <ul class="agenda-list">
+              <li class="agenda-item" onclick="showSlide(1)">
+                <span class="agenda-num">01</span>
+                <span class="agenda-dot" style="background:var(--rubrik-cyan)"></span>
+                <div><div class="agenda-label">On-Prem Workloads</div><div class="agenda-sub">Rubrik Secure Vault · Enterprise vs Foundation</div></div>
+                <span class="agenda-badge" style="background:rgba(0,200,255,0.1);border:1px solid rgba(0,200,255,0.25);color:var(--rubrik-cyan)">OWNED</span>
+              </li>
+              <li class="agenda-item" onclick="showSlide(2)">
+                <span class="agenda-num">02</span>
+                <span class="agenda-dot" style="background:var(--accent3)"></span>
+                <div><div class="agenda-label">Cloud Workloads (AWS)</div><div class="agenda-sub">Universal Cloud License · Foundation vs Enterprise</div></div>
+                <span class="agenda-badge" style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);color:#a78bfa">UPGRADE</span>
+              </li>
+              <li class="agenda-item" onclick="showSlide(3)">
+                <span class="agenda-num">03</span>
+                <span class="agenda-dot" style="background:var(--gold)"></span>
+                <div><div class="agenda-label">Microsoft 365</div><div class="agenda-sub">Exchange, OneDrive, SharePoint, Teams</div></div>
+                <span class="agenda-badge" style="background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);color:var(--red)">OVER-CONSUMED</span>
+              </li>
+              <li class="agenda-item" onclick="showSlide(4)">
+                <span class="agenda-num">04</span>
+                <span class="agenda-dot" style="background:#f472b6"></span>
+                <div><div class="agenda-label">Identity Protection</div><div class="agenda-sub">Active Directory & Entra ID</div></div>
+                <span class="agenda-badge" style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:var(--gold)">GAP</span>
+              </li>
+            </ul>
+          </div>
+          <div class="cover-stats">
+            <div class="cover-stat">
+              <div class="cover-stat-val">6</div>
+              <div class="cover-stat-label">On-Prem Clusters</div>
+            </div>
+            <div class="cover-stat">
+              <div class="cover-stat-val" style="font-size:1.1rem">Enterprise</div>
+              <div class="cover-stat-label">On-Prem Edition</div>
+            </div>
+            <div class="cover-stat">
+              <div class="cover-stat-val">1,000</div>
+              <div class="cover-stat-label">M365 Entitled Users</div>
+            </div>
+            <div class="cover-stat">
+              <div class="cover-stat-val">100TB</div>
+              <div class="cover-stat-label">Cloud Vault Licensed</div>
+            </div>
+            <div class="cover-stat">
+              <div class="cover-stat-val">2TB</div>
+              <div class="cover-stat-label">Universal Cloud License</div>
+            </div>
+            <div class="cover-stat" style="background:rgba(255,71,87,0.06);border-color:rgba(255,71,87,0.2)">
+              <div class="cover-stat-val" style="color:var(--red)">1,923</div>
+              <div class="cover-stat-label">M365 Users Consumed</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <hr class="divider">
-
-  <!-- ── ON-PREM ── -->
-  <div class="sticky-section">
-    <div class="sticky-dot" style="background:var(--rubrik-cyan)"></div>
-    <div>
-      <div class="sticky-label">On-Prem Workloads — Rubrik Secure Vault Clusters</div>
-      <div class="sticky-sublabel">Enterprise Edition · Currently Owned</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">// Section 01 — On-Prem Protection</div>
-    <h2 class="section-title">Rubrik Secure Vault — Foundation vs Enterprise Edition</h2>
-    <p class="section-desc">Par Pacific holds <strong>Enterprise Edition</strong> for all five on-prem clusters. The comparison below shows the full value of that investment versus Foundation Edition — and highlights capabilities that are exclusive to your current tier.</p>
-
-    <div class="callout-grid">
-      <div class="callout info">
-        <div class="callout-icon">🏢</div>
-        <div class="callout-title">Enterprise Edition — Owned</div>
-        <div class="callout-body">All five Rubrik Secure Vault clusters (R6304, R6404, R6408) are licensed at Enterprise Edition — the highest tier of on-prem data security protection from Rubrik.</div>
-      </div>
-      <div class="callout success">
-        <div class="callout-icon">🔒</div>
-        <div class="callout-title">Full Ransomware Resilience</div>
-        <div class="callout-body">Enterprise Edition includes ML-based anomaly detection, threat hunting, Sensitive Data Discovery (DSPM), cyber recovery orchestration, and compliance reporting — unavailable in Foundation.</div>
-      </div>
-      <div class="callout upgrade">
-        <div class="callout-icon">📦</div>
-        <div class="callout-title">RCV Archival Ready</div>
-        <div class="callout-body">Your 100TB Rubrik Cloud Vault entitlement can immediately offload aging recovery points from near-capacity clusters (MTRUBK01, NCRUBK01) to reduce on-cluster pressure.</div>
+  <!-- ── SLIDE 1: ON-PREM ── -->
+  <div class="slide-panel" id="slide-1">
+    <div class="slide-hero" style="background:linear-gradient(135deg,rgba(0,100,204,0.1) 0%,transparent 60%);">
+      <div class="slide-content">
+        <div class="slide-eyebrow" style="color:var(--rubrik-cyan)">// 01 — On-Prem Protection · Rubrik Secure Vault Clusters</div>
+        <h2 class="slide-title">Rubrik Secure Vault<br>Foundation vs <span style="color:var(--rubrik-cyan)">Enterprise Edition</span></h2>
+        <p class="slide-subtitle">Par Pacific holds <strong>Enterprise Edition</strong> for all six on-prem clusters. The comparison below shows the full value of that investment versus Foundation Edition — highlighting capabilities exclusive to your current tier.</p>
+        <div class="callout-grid" style="margin:0">
+          <div class="callout info"><div class="callout-icon">🏢</div><div class="callout-title">Enterprise Edition — Owned</div><div class="callout-body">All six Rubrik Secure Vault clusters (R6304, R6404, R6408, CCES) are licensed at Enterprise Edition — the highest tier of on-prem data security from Rubrik.</div></div>
+          <div class="callout success"><div class="callout-icon">🔒</div><div class="callout-title">Full Ransomware Resilience</div><div class="callout-body">Enterprise includes ML-based anomaly detection, threat hunting, DSPM, cyber recovery orchestration, and compliance reporting — all unavailable in Foundation.</div></div>
+          <div class="callout upgrade"><div class="callout-icon">📦</div><div class="callout-title">RCV Archival Ready</div><div class="callout-body">100TB of Rubrik Cloud Vault is licensed and ready to offload aging recovery points from MTRUBK01 (96%) and NCRUBK01 (99%) immediately.</div></div>
+        </div>
       </div>
     </div>
-
-    <div class="compare-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th class="feature-col" style="width:42%">Capability</th>
-            <th class="owned">✦ Enterprise Edition <span class="badge-owned">OWNED</span></th>
-            <th>Foundation Edition</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="feature-cat">Core Data Protection</td></tr>
-          <tr><td class="feature-name">Backup & Recovery (VMs, DBs, NAS, Physical)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Application-Consistent Snapshots</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Instant Recovery via Live Mount</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">SLA Policy Engine (Automated Retention)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Immutable Backup Architecture</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Role-Based Access Control (RBAC)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Cloud Archival (S3, Azure, GCP)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Rubrik Cloud Vault (RCV) Integration</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-
-          <tr><td colspan="3" class="feature-cat">Ransomware & Cyber Security (Enterprise Only)</td></tr>
-          <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Threat Hunting (IOC Search across Backups)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (DSPM)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Threat Containment & Quarantine</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Blueprints)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Compliance Reporting (SOC2, HIPAA, PCI)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Legal Hold</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="opportunity">
-      <div class="opportunity-title">💡 Rubrik Cloud Vault — 100TB Archive Opportunity</div>
-      <div class="opportunity-body">Par Pacific has licensed <strong>100TB of Rubrik Cloud Vault (RCV)</strong>, which can immediately be used to archive older recovery points from on-prem clusters. RCV provides end-to-end AES-256 encryption, data compression, and Rubrik-managed immutability — with no manual tiering strategies required. MTRUBK01 (96% full) and NCRUBK01 (99% full) should be prioritized for archival to RCV to recover usable on-cluster capacity and avoid SLA compliance failures.</div>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ── CLOUD ── -->
-  <div class="sticky-section">
-    <div class="sticky-dot" style="background:var(--accent3)"></div>
-    <div>
-      <div class="sticky-label">Cloud Workloads — Universal Cloud Data Management (AWS)</div>
-      <div class="sticky-sublabel">Foundation Edition · Currently Owned · Upgrade Opportunity</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">// Section 02 — Cloud Protection</div>
-    <h2 class="section-title">Cloud Workloads — Foundation vs Enterprise Edition</h2>
-    <p class="section-desc">Par Pacific protects AWS workloads under a <strong>Foundation Edition</strong> Universal Cloud license with a 2TB SAP HANA entitlement. Total protected cloud workloads far exceed entitlement — creating a coverage and cost discussion opportunity, especially for EC2 instances where Rubrik Cloud Vault delivers significant advantages over native AWS snapshots.</p>
-
-    <div class="alert-banner warn">
-      <div class="alert-icon">⚠️</div>
-      <div class="alert-text"><strong>Cloud Entitlement vs. Actual Workload Gap</strong> Par Pacific holds only a 2TB SAP HANA cloud entitlement while the protected AWS footprint includes ~5,500GB SAP HANA, 1,200GB SQL, 197GB Active Directory Domain Controllers, and 20GB EC2 instances. A cloud entitlement expansion is recommended.</div>
-    </div>
-
-    <div class="compare-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th class="feature-col" style="width:42%">Capability</th>
-            <th class="owned">Foundation Edition <span class="badge-owned">OWNED</span></th>
-            <th class="upgrade">✦ Enterprise Edition <span class="badge-upgrade">UPGRADE</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="feature-cat">Core Cloud Protection</td></tr>
-          <tr><td class="feature-name">EC2 Instance Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">RDS / Aurora Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">SAP HANA on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">SQL Server on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">SLA Policy-Driven Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Immutable Cloud Backups</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-
-          <tr><td colspan="3" class="feature-cat">Cyber Security for Cloud (Enterprise Only)</td></tr>
-          <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Threat Hunting across Cloud Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (Cloud DSPM)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Threat Containment for Cloud Workloads</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Compliance Reporting for Cloud</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-
-          <tr><td colspan="3" class="feature-cat">EC2 Snapshot Optimization via Rubrik Cloud Vault</td></tr>
-          <tr><td class="feature-name">Native AWS Snapshot Support</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Replace Snapshots with RCV (Immutable + Compressed)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Automated Tiering via SLA (no manual config)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">~40% Cost Reduction vs Native AWS Snapshots</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">AES-256 Encryption + Immutability for EC2 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout-grid">
-      <div class="callout warning">
-        <div class="callout-icon">💸</div>
-        <div class="callout-title">The EC2 Snapshot Problem</div>
-        <div class="callout-body">Native AWS snapshots carry no compression, no encryption, and no immutability guarantees. They typically cost ~40% more than RCV alternatives, and require manually-maintained tiering policies that reduce costs slowly but never eliminate snapshot spend entirely.</div>
+    <div class="slide-body">
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="feature-col" style="width:42%">Capability</th>
+              <th class="owned">✦ Enterprise Edition <span class="badge-owned">OWNED</span></th>
+              <th>Foundation Edition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" class="feature-cat">Core Data Protection</td></tr>
+            <tr><td class="feature-name">Backup & Recovery (VMs, DBs, NAS, Physical)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Application-Consistent Snapshots</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Instant Recovery via Live Mount</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">SLA Policy Engine (Automated Retention)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Immutable Backup Architecture</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Role-Based Access Control (RBAC)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Cloud Archival (S3, Azure, GCP)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Rubrik Cloud Vault (RCV) Integration</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">Ransomware & Cyber Security (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Threat Hunting (IOC Search across Backups)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (DSPM)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Threat Containment & Quarantine</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Blueprints)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Compliance Reporting (SOC2, HIPAA, PCI)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Legal Hold</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="callout success">
-        <div class="callout-icon">🛡️</div>
-        <div class="callout-title">RCV as Snapshot Replacement</div>
-        <div class="callout-body">Rubrik Cloud Vault can replace EC2 snapshots with compressed, encrypted, immutable backups managed under a single SLA policy — eliminating snapshot costs, simplifying operations, and hardening the EC2 recovery posture against ransomware.</div>
+      <div class="opportunity">
+        <div class="opportunity-title">💡 Rubrik Cloud Vault — 100TB Archive Opportunity</div>
+        <div class="opportunity-body">Par Pacific has licensed <strong>100TB of Rubrik Cloud Vault (RCV)</strong>, which can immediately archive older recovery points from on-prem clusters. RCV provides AES-256 encryption, data compression, and Rubrik-managed immutability with no manual tiering required. MTRUBK01 (96% full) and NCRUBK01 (99% full) should be prioritized for immediate archival to RCV.</div>
       </div>
     </div>
   </div>
 
-  <hr class="divider">
-
-  <!-- ── M365 ── -->
-  <div class="sticky-section">
-    <div class="sticky-dot" style="background:var(--gold)"></div>
-    <div>
-      <div class="sticky-label">Microsoft 365 — Exchange, OneDrive, SharePoint, Teams</div>
-      <div class="sticky-sublabel">Foundation Edition · Currently Owned · Over-Consumed</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">// Section 03 — Microsoft 365</div>
-    <h2 class="section-title">M365 Protection — Foundation vs Enterprise Edition</h2>
-    <p class="section-desc">Par Pacific's M365 environment is protected under <strong>Foundation Edition</strong>. Usage significantly exceeds entitlement for both user count and capacity. A DPC credit is currently available. Upgrading to Enterprise Edition would add anomaly detection, threat hunting, and eDiscovery/Legal Hold for M365 data.</p>
-
-    <div class="alert-banner red">
-      <div class="alert-icon">🚨</div>
-      <div class="alert-text"><strong>Over-Consumption Alert — Users & FEGB Capacity</strong> 1,923 M365 user licenses consumed against 1,000 entitled (92.3% overage). FEGB consumed is 64,205GB against 20,000GB entitled (221% overage). Immediate remediation discussion required.</div>
-    </div>
-
-    <div class="alert-banner green">
-      <div class="alert-icon">✅</div>
-      <div class="alert-text"><strong>DPC Credit Eligible</strong> Based on total DPC consumption of 74,256GB, Par Pacific qualifies for a Data Protection Credit at this time. Factor into renewal and expansion negotiations.</div>
-    </div>
-
-    <div class="compare-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th class="feature-col" style="width:42%">M365 Capability</th>
-            <th class="owned">Foundation Edition <span class="badge-owned">OWNED</span></th>
-            <th class="upgrade">✦ Enterprise Edition <span class="badge-upgrade">UPGRADE</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="feature-cat">Core M365 Workload Coverage</td></tr>
-          <tr><td class="feature-name">Exchange Online Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">OneDrive Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">SharePoint Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Microsoft Teams Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Item-Level Granular Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">SLA Policy-Driven Retention</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Self-Service Recovery Portal</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-          <tr><td class="feature-name">Role-Based Access Control</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-
-          <tr><td colspan="3" class="feature-cat">Cyber Security for M365 (Enterprise Only)</td></tr>
-          <tr class="highlight-row"><td class="feature-name">Anomaly Detection for M365 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Threat Hunting across M365 Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery in M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard (M365)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-
-          <tr><td colspan="3" class="feature-cat">Compliance & Governance (Enterprise Only)</td></tr>
-          <tr class="highlight-row"><td class="feature-name">eDiscovery & Legal Hold for M365 Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-          <tr class="highlight-row"><td class="feature-name">Compliance Reporting for M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ── IDENTITY ── -->
-  <div class="sticky-section">
-    <div class="sticky-dot" style="background:#f472b6"></div>
-    <div>
-      <div class="sticky-label">Identity Protection — Active Directory & Entra ID</div>
-      <div class="sticky-sublabel">Not Currently Owned · Expansion Opportunity</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">// Section 04 — Identity Recovery & Resilience</div>
-    <h2 class="section-title">Identity Protection — Current Coverage vs Dedicated Identity SKUs</h2>
-    <p class="section-desc">Par Pacific's on-prem Enterprise licenses and cloud Foundation licenses protect AD and Entra ID users and groups as backup objects — but do not provide orchestrated forest recovery, Entra ID enhanced protection, or proactive identity threat detection. The table below compares current coverage against Rubrik's dedicated Identity SKUs.</p>
-
-    <div class="alert-banner blue">
-      <div class="alert-icon">🔑</div>
-      <div class="alert-text"><strong>Identity is the #1 Ransomware Attack Vector</strong> Active Directory compromise is the most common lateral movement path in enterprise ransomware. Par Pacific protects AD user and group objects today — but has no orchestrated forest recovery capability. A single AD forest outage could halt all on-prem operations. Rubrik Identity Recovery or Resilience directly addresses this gap.</div>
-    </div>
-
-    <div class="compare-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th class="feature-col" style="width:28%">Capability</th>
-            <th style="border-top:2px solid var(--rubrik-cyan)">On-Prem<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Enterprise Ed. (Owned)</span></th>
-            <th style="border-top:2px solid var(--accent3)">Cloud (AWS)<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Foundation Ed. (Owned)</span></th>
-            <th class="upgrade">Identity Recovery<br><span class="badge-upgrade">NOT OWNED</span></th>
-            <th class="upgrade" style="border-top-color:#f472b6">Identity Resilience<br><span class="badge-upgrade">NOT OWNED</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="5" class="feature-cat">Active Directory (On-Prem)</td></tr>
-          <tr>
-            <td class="feature-name">AD Users & Groups Protection</td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr>
-            <td class="feature-name">AD Object-Level Recovery</td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">Orchestrated AD Forest Recovery</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">AD Change Monitoring & Rollback</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">Continuous AD Replication Monitoring</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">AD Threat Detection & Alerting</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-
-          <tr><td colspan="5" class="feature-cat">Entra ID (Azure AD)</td></tr>
-          <tr>
-            <td class="feature-name">Entra ID Users & Groups Protection</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">Entra ID Enhanced Protection</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">Conditional Access Policy Recovery</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">Hybrid AD + Entra Unified Recovery</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-          <tr class="highlight-row">
-            <td class="feature-name">Entra ID Threat Detection & Alerting</td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="cross">—</span></td>
-            <td class="center"><span class="check">✔</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout-grid">
-      <div class="callout upgrade">
-        <div class="callout-icon">🛡️</div>
-        <div class="callout-title">Identity Recovery SKU</div>
-        <div class="callout-body">Purpose-built for AD and Entra ID recovery. Adds orchestrated forest-level recovery, Entra ID enhanced protection, conditional access policy recovery, and hybrid identity restoration — critical for ransomware recovery scenarios.</div>
+  <!-- ── SLIDE 2: CLOUD ── -->
+  <div class="slide-panel" id="slide-2">
+    <div class="slide-hero" style="background:linear-gradient(135deg,rgba(124,58,237,0.1) 0%,transparent 60%);">
+      <div class="slide-content">
+        <div class="slide-eyebrow" style="color:#a78bfa">// 02 — Cloud Workloads · Universal Cloud Data Management (AWS)</div>
+        <h2 class="slide-title">Cloud Protection<br><span style="color:#a78bfa">Foundation vs Enterprise Edition</span></h2>
+        <p class="slide-subtitle">Par Pacific protects AWS workloads under a <strong>Foundation Edition</strong> Universal Cloud license (2TB). Total protected cloud workloads far exceed entitlement — creating both a coverage gap and an EC2 snapshot cost optimization opportunity via Rubrik Cloud Vault.</p>
+        <div class="alert-banner warn" style="margin:0">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-text"><strong>Cloud Entitlement Gap</strong> Par Pacific holds a 2TB Universal Cloud License while the total protected AWS footprint totals 6,917GB across SAP HANA (5,500GB), SQL (1,200GB), Active Directory (197GB), and EC2 (20GB) — 338% over entitlement.</div>
+        </div>
       </div>
-      <div class="callout upgrade">
-        <div class="callout-icon">🔭</div>
-        <div class="callout-title">Identity Resilience SKU</div>
-        <div class="callout-body">Everything in Identity Recovery, plus proactive threat detection: continuous monitoring of AD replication health, change alerting, and Entra ID anomaly detection — to prevent identity attacks before they succeed.</div>
+    </div>
+    <div class="slide-body">
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="feature-col" style="width:42%">Capability</th>
+              <th class="owned">Foundation Edition <span class="badge-owned">OWNED</span></th>
+              <th class="upgrade">✦ Enterprise Edition <span class="badge-upgrade">UPGRADE</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" class="feature-cat">Core Cloud Protection</td></tr>
+            <tr><td class="feature-name">EC2 Instance Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">RDS / Aurora Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">SAP HANA on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">SQL Server on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">SLA Policy-Driven Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Immutable Cloud Backups</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">Cyber Security for Cloud (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Threat Hunting across Cloud Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (Cloud DSPM)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Threat Containment for Cloud Workloads</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Compliance Reporting for Cloud</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">EC2 Snapshot Optimization via Rubrik Cloud Vault</td></tr>
+            <tr><td class="feature-name">Native AWS Snapshot Support</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Replace Snapshots with RCV (Immutable + Compressed)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Automated Tiering via SLA (no manual config)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">~40% Cost Reduction vs Native AWS Snapshots</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">AES-256 Encryption + Immutability for EC2 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout-grid">
+        <div class="callout warning"><div class="callout-icon">💸</div><div class="callout-title">The EC2 Snapshot Problem</div><div class="callout-body">Native AWS snapshots carry no compression, no encryption, and no immutability. They typically cost ~40% more than RCV alternatives, and require manual tiering policies that never fully eliminate snapshot spend.</div></div>
+        <div class="callout success"><div class="callout-icon">🛡️</div><div class="callout-title">RCV as Snapshot Replacement</div><div class="callout-body">Rubrik Cloud Vault replaces EC2 snapshots with compressed, encrypted, immutable backups under a single SLA policy — eliminating snapshot costs and hardening recovery posture against ransomware.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3: M365 ── -->
+  <div class="slide-panel" id="slide-3">
+    <div class="slide-hero" style="background:linear-gradient(135deg,rgba(245,166,35,0.08) 0%,transparent 60%);">
+      <div class="slide-content">
+        <div class="slide-eyebrow" style="color:var(--gold)">// 03 — Microsoft 365 · Exchange · OneDrive · SharePoint · Teams</div>
+        <h2 class="slide-title">M365 Protection<br><span style="color:var(--gold)">Foundation vs Enterprise Edition</span></h2>
+        <p class="slide-subtitle">Par Pacific's M365 environment is protected under <strong>Foundation Edition</strong>. Usage significantly exceeds entitlement on both user count and capacity. A DPC credit is currently available. Enterprise Edition adds anomaly detection, threat hunting, and eDiscovery/Legal Hold.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <div class="alert-banner red" style="margin:0;flex:1;min-width:280px">
+            <div class="alert-icon">🚨</div>
+            <div class="alert-text"><strong>Over-Consumption Alert</strong> 1,923 users consumed vs. 1,000 entitled (+92.3%). FEGB: 64,205GB consumed vs. 20,000GB entitled (+221%).</div>
+          </div>
+          <div class="alert-banner green" style="margin:0;flex:1;min-width:240px">
+            <div class="alert-icon">✅</div>
+            <div class="alert-text"><strong>DPC Credit Eligible</strong> 74,256GB total DPC consumed. Par Pacific qualifies for a Data Protection Credit — factor into renewal negotiations.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="feature-col" style="width:42%">M365 Capability</th>
+              <th class="owned">Foundation Edition <span class="badge-owned">OWNED</span></th>
+              <th class="upgrade">✦ Enterprise Edition <span class="badge-upgrade">UPGRADE</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" class="feature-cat">Core M365 Workload Coverage</td></tr>
+            <tr><td class="feature-name">Exchange Online Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">OneDrive Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">SharePoint Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Microsoft Teams Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Item-Level Granular Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">SLA Policy-Driven Retention</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Self-Service Recovery Portal</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">Role-Based Access Control</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">Cyber Security for M365 (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td class="feature-name">Anomaly Detection for M365 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Threat Hunting across M365 Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery in M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard (M365)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">Compliance & Governance (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td class="feature-name">eDiscovery & Legal Hold for M365 Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Compliance Reporting for M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4: IDENTITY ── -->
+  <div class="slide-panel" id="slide-4">
+    <div class="slide-hero" style="background:linear-gradient(135deg,rgba(244,114,182,0.08) 0%,transparent 60%);">
+      <div class="slide-content">
+        <div class="slide-eyebrow" style="color:#f472b6">// 04 — Identity Protection · Active Directory & Entra ID</div>
+        <h2 class="slide-title">Identity Recovery<br><span style="color:#f472b6">& Resilience</span></h2>
+        <p class="slide-subtitle">Par Pacific's on-prem Enterprise and cloud Foundation licenses protect AD and Entra ID users and groups — but provide no orchestrated forest recovery, Entra ID enhanced protection, or proactive identity threat detection.</p>
+        <div class="alert-banner blue" style="margin:0">
+          <div class="alert-icon">🔑</div>
+          <div class="alert-text"><strong>Identity is the #1 Ransomware Attack Vector</strong> AD compromise is the most common lateral movement path in enterprise ransomware. Par Pacific has no orchestrated forest recovery capability today. A single forest outage could halt all on-prem operations.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="feature-col" style="width:28%">Capability</th>
+              <th style="border-top:2px solid var(--rubrik-cyan)">On-Prem<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Enterprise Ed. (Owned)</span></th>
+              <th style="border-top:2px solid var(--accent3)">Cloud (AWS)<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Foundation Ed. (Owned)</span></th>
+              <th class="upgrade">Identity Recovery<br><span class="badge-upgrade">NOT OWNED</span></th>
+              <th class="upgrade" style="border-top-color:#f472b6">Identity Resilience<br><span class="badge-upgrade">NOT OWNED</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" class="feature-cat">Active Directory (On-Prem)</td></tr>
+            <tr><td class="feature-name">AD Users & Groups Protection</td><td class="center"><span class="check">✔</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr><td class="feature-name">AD Object-Level Recovery</td><td class="center"><span class="check">✔</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Orchestrated AD Forest Recovery</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">AD Change Monitoring & Rollback</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Continuous AD Replication Monitoring</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">AD Threat Detection & Alerting</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr><td colspan="5" class="feature-cat">Entra ID (Azure AD)</td></tr>
+            <tr><td class="feature-name">Entra ID Users & Groups Protection</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Entra ID Enhanced Protection</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Conditional Access Policy Recovery</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Hybrid AD + Entra Unified Recovery</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td class="feature-name">Entra ID Threat Detection & Alerting</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout-grid">
+        <div class="callout upgrade"><div class="callout-icon">🛡️</div><div class="callout-title">Identity Recovery SKU</div><div class="callout-body">Adds orchestrated forest-level recovery, Entra ID enhanced protection, conditional access policy recovery, and hybrid identity restoration — critical for ransomware scenarios.</div></div>
+        <div class="callout upgrade"><div class="callout-icon">🔭</div><div class="callout-title">Identity Resilience SKU</div><div class="callout-body">Everything in Identity Recovery, plus proactive threat detection: continuous AD replication monitoring, change alerting, and Entra ID anomaly detection to stop attacks before they succeed.</div></div>
       </div>
     </div>
   </div>
@@ -706,28 +736,75 @@
     <div class="dash-card">
       <div class="dash-card-title">Universal Cloud License — Workload Consumption vs. 2TB Entitlement</div>
 
-      <div class="prog-label"><span>SAP HANA Databases</span><span>5,500 GB</span></div>
-      <div class="prog-track"><div class="prog-bar crit" style="width:100%"></div></div>
+      <!-- Stacked bar -->
+      <div style="margin-bottom:1rem;">
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px;">
+          <span style="color:var(--text2)">0 GB</span>
+          <span style="color:var(--gold);font-family:'DM Mono',monospace;font-size:0.72rem;">▲ 2,048 GB entitled</span>
+          <span style="color:var(--text2)">6,917 GB</span>
+        </div>
 
-      <div class="prog-label"><span>SQL Databases</span><span>1,200 GB</span></div>
-      <div class="prog-track"><div class="prog-bar crit" style="width:100%"></div></div>
+        <!-- Outer track representing total consumed (6917 GB = 100%) -->
+        <div style="position:relative;height:36px;background:var(--surface2);border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <!-- SAP HANA: 5500/6917 = 79.5% -->
+          <div style="position:absolute;left:0;top:0;height:100%;width:79.5%;background:linear-gradient(90deg,#ff4757,#ff6b8a);" title="SAP HANA: 5,500 GB"></div>
+          <!-- SQL: 1200/6917 = 17.3% -->
+          <div style="position:absolute;left:79.5%;top:0;height:100%;width:17.3%;background:linear-gradient(90deg,#f5a623,#f97316);" title="SQL: 1,200 GB"></div>
+          <!-- AD: 197/6917 = 2.85% -->
+          <div style="position:absolute;left:96.8%;top:0;height:100%;width:2.85%;background:linear-gradient(90deg,#7c3aed,#a78bfa);" title="AD: 197 GB"></div>
+          <!-- EC2: 20/6917 = 0.29% — render at min visible width -->
+          <div style="position:absolute;left:99.65%;top:0;height:100%;width:0.35%;background:#10d98e;" title="EC2: 20 GB"></div>
+          <!-- Entitlement marker at 2048/6917 = 29.6% -->
+          <div style="position:absolute;left:29.6%;top:0;height:100%;width:2px;background:var(--gold);opacity:0.9;"></div>
+        </div>
 
-      <div class="prog-label"><span>Active Directory Domain Controllers</span><span>197 GB</span></div>
-      <div class="prog-track"><div class="prog-bar warn" style="width:100%"></div></div>
+        <!-- Entitlement label below bar -->
+        <div style="position:relative;height:16px;margin-top:3px;">
+          <div style="position:absolute;left:29.6%;transform:translateX(-50%);font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--gold);">│ 2TB limit</div>
+        </div>
+      </div>
 
-      <div class="prog-label"><span>EC2 Instances</span><span>20 GB</span></div>
-      <div class="prog-track"><div class="prog-bar ok" style="width:100%"></div></div>
+      <!-- Legend -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.6rem;margin-top:0.8rem;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:12px;border-radius:3px;background:#ff4757;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:500;">SAP HANA</div>
+            <div style="font-size:0.72rem;font-family:'DM Mono',monospace;color:var(--text2);">5,500 GB &nbsp;·&nbsp; 79.5%</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:12px;border-radius:3px;background:#f5a623;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:500;">SQL Databases</div>
+            <div style="font-size:0.72rem;font-family:'DM Mono',monospace;color:var(--text2);">1,200 GB &nbsp;·&nbsp; 17.3%</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:12px;border-radius:3px;background:#7c3aed;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:500;">Active Directory</div>
+            <div style="font-size:0.72rem;font-family:'DM Mono',monospace;color:var(--text2);">197 GB &nbsp;·&nbsp; 2.85%</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:12px;border-radius:3px;background:#10d98e;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:500;">EC2 Instances</div>
+            <div style="font-size:0.72rem;font-family:'DM Mono',monospace;color:var(--text2);">20 GB &nbsp;·&nbsp; 0.29%</div>
+          </div>
+        </div>
+      </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;padding-top:0.75rem;border-top:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--border);">
         <span style="font-size:0.8rem;font-weight:600;">Total Consumed</span>
         <span style="font-family:'DM Mono',monospace;font-size:0.82rem;">
           <span style="color:var(--red)">6,917 GB used</span>
           <span style="color:var(--text3);margin:0 6px">/</span>
-          <span style="color:var(--text2)">2,048 GB entitled</span>
+          <span style="color:var(--gold)">2,048 GB entitled</span>
           <span style="color:var(--red);margin-left:8px;font-weight:600">(338% over)</span>
         </span>
       </div>
-      <div style="font-size:0.75rem;color:var(--text3);margin-top:0.5rem;">All bars shown at maximum — each workload alone would exceed the 2TB entitlement when combined with others. Total overage is 4,869GB.</div>
     </div>
 
     <div class="alert-banner warn">
@@ -771,13 +848,41 @@
 <!-- END DASHBOARD -->
 
 <script>
+  let currentSlide = 0;
+  const totalSlides = 5;
+
   function showView(name, btn) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('view-' + name).classList.add('active');
     btn.classList.add('active');
     window.scrollTo(0, 0);
+    // Show/hide slide tab bar
+    const bar = document.getElementById('slide-tab-bar');
+    if (bar) bar.style.display = name === 'presentation' ? 'flex' : 'none';
   }
+
+  function showSlide(index) {
+    document.querySelectorAll('.slide-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.slide-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('slide-' + index).classList.add('active');
+    document.querySelectorAll('.slide-tab')[index].classList.add('active');
+    currentSlide = index;
+    document.getElementById('prev-btn').disabled = index === 0;
+    document.getElementById('next-btn').disabled = index === totalSlides - 1;
+    window.scrollTo(0, 0);
+  }
+
+  function prevSlide() { if (currentSlide > 0) showSlide(currentSlide - 1); }
+  function nextSlide() { if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1); }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    const pres = document.getElementById('view-presentation');
+    if (!pres || !pres.classList.contains('active')) return;
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
 </script>
 </body>
 </html>
