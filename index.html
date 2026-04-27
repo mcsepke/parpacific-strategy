@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Par Pacific — Rubrik Portfolio Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0d1320;
+    --surface2: #131b2e;
+    --border: #1e2d4a;
+    --border2: #243352;
+    --accent: #00d4ff;
+    --accent2: #0088ff;
+    --accent3: #7c3aed;
+    --gold: #f5a623;
+    --green: #10d98e;
+    --red: #ff4757;
+    --orange: #ff6b35;
+    --text: #e8edf5;
+    --text2: #8899bb;
+    --text3: #4a5a78;
+    --rubrik-blue: #0063cc;
+    --rubrik-cyan: #00c8ff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 60px;
+    background: rgba(8,12,20,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .rubrik-logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--rubrik-cyan), var(--rubrik-blue));
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: white;
+  }
+  .nav-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); letter-spacing: 0.02em; }
+  .nav-sub { font-size: 0.72rem; color: var(--text2); margin-top: 1px; }
+  .nav-tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+  .nav-tab { padding: 6px 18px; border-radius: 5px; font-size: 0.82rem; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text2); transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+  .nav-tab.active { background: linear-gradient(135deg, var(--rubrik-blue), var(--accent3)); color: white; }
+  .nav-tab:hover:not(.active) { color: var(--text); background: var(--surface2); }
+  .nav-badge { font-size: 0.72rem; background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px; padding: 3px 10px; color: var(--text2); }
+
+  .view { display: none; padding-top: 60px; }
+  .view.active { display: block; }
+
+  /* HERO */
+  .hero { position: relative; padding: 5rem 2.5rem 3rem; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 70% 60% at 80% 40%, rgba(0,100,204,0.12) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 80%, rgba(124,58,237,0.08) 0%, transparent 60%); }
+  .hero-grid { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.2; }
+  .hero-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+  .hero-headline { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+  .hero-headline span { color: var(--rubrik-cyan); }
+  .hero-desc { font-size: 1rem; color: var(--text2); max-width: 560px; line-height: 1.7; margin-bottom: 2rem; }
+  .hero-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .hero-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.4rem; }
+  .hero-stat-val { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--rubrik-cyan); }
+  .hero-stat-label { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
+
+  /* SECTION */
+  .section { padding: 3rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .section-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.7; margin-bottom: 2rem; max-width: 700px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* STICKY */
+  .sticky-section { position: sticky; top: 60px; z-index: 50; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0.8rem 2.5rem; display: flex; align-items: center; gap: 12px; }
+  .sticky-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sticky-label { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; }
+  .sticky-sublabel { font-size: 0.78rem; color: var(--text2); }
+
+  /* TABLE */
+  .compare-wrap { overflow-x: auto; margin-bottom: 2rem; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .compare-table th { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; padding: 1rem 1.2rem; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  .compare-table th.owned { background: linear-gradient(135deg, rgba(0,100,204,0.15), rgba(0,200,255,0.08)); border-top: 2px solid var(--rubrik-cyan); color: var(--rubrik-cyan); }
+  .compare-table th.upgrade { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(245,166,35,0.05)); border-top: 2px solid var(--accent3); color: #a78bfa; }
+  .compare-table th.feature-col { color: var(--text2); }
+  .compare-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .compare-table .feature-name { font-weight: 500; color: var(--text); }
+  .compare-table .feature-cat { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; background: var(--surface2); padding: 0.6rem 1.2rem; }
+  tr.highlight-row td { background: rgba(124,58,237,0.03); }
+
+  .check { color: var(--green); font-size: 1.1rem; }
+  .cross { color: var(--text3); font-size: 1.1rem; }
+  td.center { text-align: center; }
+
+  .badge-owned { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.25); color: var(--rubrik-cyan); border-radius: 20px; font-size: 0.68rem; font-family: 'DM Mono', monospace; padding: 2px 8px; white-space: nowrap; }
+  .badge-upgrade { display: inline-flex; align-items: center; gap: 5px; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); color: #a78bfa; border-radius: 20px; font-size: 0.68rem; font-family: 'DM Mono', monospace; padding: 2px 8px; white-space: nowrap; }
+
+  /* CALLOUTS */
+  .callout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .callout { border-radius: 10px; padding: 1.4rem; border: 1px solid; }
+  .callout.info { background: rgba(0,100,204,0.08); border-color: rgba(0,100,204,0.3); }
+  .callout.warning { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.3); }
+  .callout.upgrade { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.3); }
+  .callout.success { background: rgba(16,217,142,0.08); border-color: rgba(16,217,142,0.3); }
+  .callout-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+  .callout-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .callout-body { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+
+  /* OPPORTUNITY */
+  .opportunity { background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(0,100,204,0.08)); border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 1.6rem; margin-bottom: 2rem; }
+  .opportunity-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; color: #a78bfa; }
+  .opportunity-body { font-size: 0.85rem; color: var(--text2); line-height: 1.7; }
+
+  /* ALERT */
+  .alert-banner { display: flex; align-items: flex-start; gap: 12px; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.83rem; line-height: 1.6; border: 1px solid; }
+  .alert-banner.red { background: rgba(255,71,87,0.08); border-color: rgba(255,71,87,0.3); }
+  .alert-banner.warn { background: rgba(245,166,35,0.08); border-color: rgba(245,166,35,0.3); }
+  .alert-banner.green { background: rgba(16,217,142,0.08); border-color: rgba(16,217,142,0.3); }
+  .alert-banner.blue { background: rgba(0,200,255,0.08); border-color: rgba(0,200,255,0.3); }
+  .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .alert-text strong { display: block; margin-bottom: 2px; font-size: 0.87rem; }
+
+  /* DASHBOARD */
+  .dash-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem 2.5rem; display: flex; align-items: center; justify-content: space-between; }
+  .dash-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; }
+  .dash-meta { font-size: 0.8rem; color: var(--text2); margin-top: 2px; }
+  .dash-body { padding: 2rem 2.5rem; }
+  .dash-section-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+  .dash-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; position: relative; overflow: hidden; }
+  .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .kpi.ok::before { background: var(--green); }
+  .kpi.warn::before { background: var(--gold); }
+  .kpi.crit::before { background: var(--red); }
+  .kpi.info::before { background: var(--rubrik-cyan); }
+  .kpi-label { font-size: 0.72rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-family: 'DM Mono', monospace; }
+  .kpi-val { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; }
+  .kpi-sub { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+  .kpi-sub.ok { color: var(--green); }
+  .kpi-sub.warn { color: var(--gold); }
+  .kpi-sub.crit { color: var(--red); }
+
+  .cluster-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-bottom: 1.5rem; }
+  .cluster-table th { font-size: 0.7rem; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); text-align: left; }
+  .cluster-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
+  .cluster-table tr:hover td { background: rgba(255,255,255,0.015); }
+  .cluster-name { font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 500; color: var(--rubrik-cyan); }
+  .cluster-model { font-size: 0.75rem; color: var(--text2); }
+  .cluster-version { font-family: 'DM Mono', monospace; font-size: 0.72rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; color: var(--text2); }
+
+  .prog-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; }
+  .prog-label span:first-child { font-weight: 500; }
+  .prog-label span:last-child { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text2); }
+  .prog-track { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .prog-bar { height: 100%; border-radius: 4px; }
+  .prog-bar.ok { background: linear-gradient(90deg, var(--green), #06b6a0); }
+  .prog-bar.warn { background: linear-gradient(90deg, var(--gold), #f97316); }
+  .prog-bar.crit { background: linear-gradient(90deg, var(--red), #ff6b8a); }
+
+  .dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; margin-bottom: 1.5rem; }
+  .dash-card-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="rubrik-logo">R</div>
+    <div>
+      <div class="nav-title">Rubrik Portfolio Review</div>
+      <div class="nav-sub">Par Pacific Holdings</div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showView('presentation', this)">📊 Presentation</button>
+    <button class="nav-tab" onclick="showView('dashboard', this)">📈 Dashboard</button>
+  </div>
+  <div class="nav-badge">April 2025</div>
+</nav>
+
+<!-- ══════════════════════ PRESENTATION ══════════════════════ -->
+<div id="view-presentation" class="view active">
+
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">// CONFIDENTIAL · RUBRIK ACCOUNT REVIEW · PAR PACIFIC HOLDINGS</div>
+      <h1 class="hero-headline">Data Security<br><span>Portfolio Overview</span></h1>
+      <p class="hero-desc">A comprehensive review of Par Pacific's current Rubrik entitlements, utilization posture, and expansion opportunities across on-prem, cloud, M365, and identity workloads.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-val">5</div><div class="hero-stat-label">On-Prem Clusters</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">Enterprise Ed.</div><div class="hero-stat-label">On-Prem License</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">1,000</div><div class="hero-stat-label">M365 Entitled Users</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">100 TB</div><div class="hero-stat-label">Cloud Vault Licensed</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">2 TB</div><div class="hero-stat-label">Cloud Entitlement</div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── ON-PREM ── -->
+  <div class="sticky-section">
+    <div class="sticky-dot" style="background:var(--rubrik-cyan)"></div>
+    <div>
+      <div class="sticky-label">On-Prem Workloads — Rubrik Secure Vault Clusters</div>
+      <div class="sticky-sublabel">Enterprise Edition · Currently Owned</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Section 01 — On-Prem Protection</div>
+    <h2 class="section-title">Rubrik Secure Vault — Foundation vs Enterprise Edition</h2>
+    <p class="section-desc">Par Pacific holds <strong>Enterprise Edition</strong> for all five on-prem clusters. The comparison below shows the full value of that investment versus Foundation Edition — and highlights capabilities that are exclusive to your current tier.</p>
+
+    <div class="callout-grid">
+      <div class="callout info">
+        <div class="callout-icon">🏢</div>
+        <div class="callout-title">Enterprise Edition — Owned</div>
+        <div class="callout-body">All five Rubrik Secure Vault clusters (R6304, R6404, R6408) are licensed at Enterprise Edition — the highest tier of on-prem data security protection from Rubrik.</div>
+      </div>
+      <div class="callout success">
+        <div class="callout-icon">🔒</div>
+        <div class="callout-title">Full Ransomware Resilience</div>
+        <div class="callout-body">Enterprise Edition includes ML-based anomaly detection, threat hunting, Sensitive Data Discovery (DSPM), cyber recovery orchestration, and compliance reporting — unavailable in Foundation.</div>
+      </div>
+      <div class="callout upgrade">
+        <div class="callout-icon">📦</div>
+        <div class="callout-title">RCV Archival Ready</div>
+        <div class="callout-body">Your 100TB Rubrik Cloud Vault entitlement can immediately offload aging recovery points from near-capacity clusters (MTRUBK01, NCRUBK01) to reduce on-cluster pressure.</div>
+      </div>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feature-col" style="width:42%">Capability</th>
+            <th class="owned">✦ Enterprise Edition <span class="badge-owned">OWNED</span></th>
+            <th>Foundation Edition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="feature-cat">Core Data Protection</td></tr>
+          <tr><td class="feature-name">Backup & Recovery (VMs, DBs, NAS, Physical)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Application-Consistent Snapshots</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Instant Recovery via Live Mount</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">SLA Policy Engine (Automated Retention)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Immutable Backup Architecture</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Role-Based Access Control (RBAC)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Cloud Archival (S3, Azure, GCP)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Rubrik Cloud Vault (RCV) Integration</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+          <tr><td colspan="3" class="feature-cat">Ransomware & Cyber Security (Enterprise Only)</td></tr>
+          <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Threat Hunting (IOC Search across Backups)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (DSPM)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Threat Containment & Quarantine</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Blueprints)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Compliance Reporting (SOC2, HIPAA, PCI)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Legal Hold</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="opportunity">
+      <div class="opportunity-title">💡 Rubrik Cloud Vault — 100TB Archive Opportunity</div>
+      <div class="opportunity-body">Par Pacific has licensed <strong>100TB of Rubrik Cloud Vault (RCV)</strong>, which can immediately be used to archive older recovery points from on-prem clusters. RCV provides end-to-end AES-256 encryption, data compression, and Rubrik-managed immutability — with no manual tiering strategies required. MTRUBK01 (96% full) and NCRUBK01 (99% full) should be prioritized for archival to RCV to recover usable on-cluster capacity and avoid SLA compliance failures.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── CLOUD ── -->
+  <div class="sticky-section">
+    <div class="sticky-dot" style="background:var(--accent3)"></div>
+    <div>
+      <div class="sticky-label">Cloud Workloads — Universal Cloud Data Management (AWS)</div>
+      <div class="sticky-sublabel">Foundation Edition · Currently Owned · Upgrade Opportunity</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Section 02 — Cloud Protection</div>
+    <h2 class="section-title">Cloud Workloads — Foundation vs Enterprise Edition</h2>
+    <p class="section-desc">Par Pacific protects AWS workloads under a <strong>Foundation Edition</strong> Universal Cloud license with a 2TB SAP HANA entitlement. Total protected cloud workloads far exceed entitlement — creating a coverage and cost discussion opportunity, especially for EC2 instances where Rubrik Cloud Vault delivers significant advantages over native AWS snapshots.</p>
+
+    <div class="alert-banner warn">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text"><strong>Cloud Entitlement vs. Actual Workload Gap</strong> Par Pacific holds only a 2TB SAP HANA cloud entitlement while the protected AWS footprint includes ~5,500GB SAP HANA, 1,200GB SQL, 197GB Active Directory Domain Controllers, and 20GB EC2 instances. A cloud entitlement expansion is recommended.</div>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feature-col" style="width:42%">Capability</th>
+            <th class="owned">Foundation Edition <span class="badge-owned">OWNED</span></th>
+            <th class="upgrade">✦ Enterprise Edition <span class="badge-upgrade">UPGRADE</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="feature-cat">Core Cloud Protection</td></tr>
+          <tr><td class="feature-name">EC2 Instance Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">RDS / Aurora Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">SAP HANA on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">SQL Server on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">SLA Policy-Driven Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Immutable Cloud Backups</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+          <tr><td colspan="3" class="feature-cat">Cyber Security for Cloud (Enterprise Only)</td></tr>
+          <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Threat Hunting across Cloud Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (Cloud DSPM)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Threat Containment for Cloud Workloads</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Compliance Reporting for Cloud</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+
+          <tr><td colspan="3" class="feature-cat">EC2 Snapshot Optimization via Rubrik Cloud Vault</td></tr>
+          <tr><td class="feature-name">Native AWS Snapshot Support</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Replace Snapshots with RCV (Immutable + Compressed)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Automated Tiering via SLA (no manual config)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">~40% Cost Reduction vs Native AWS Snapshots</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">AES-256 Encryption + Immutability for EC2 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout-grid">
+      <div class="callout warning">
+        <div class="callout-icon">💸</div>
+        <div class="callout-title">The EC2 Snapshot Problem</div>
+        <div class="callout-body">Native AWS snapshots carry no compression, no encryption, and no immutability guarantees. They typically cost ~40% more than RCV alternatives, and require manually-maintained tiering policies that reduce costs slowly but never eliminate snapshot spend entirely.</div>
+      </div>
+      <div class="callout success">
+        <div class="callout-icon">🛡️</div>
+        <div class="callout-title">RCV as Snapshot Replacement</div>
+        <div class="callout-body">Rubrik Cloud Vault can replace EC2 snapshots with compressed, encrypted, immutable backups managed under a single SLA policy — eliminating snapshot costs, simplifying operations, and hardening the EC2 recovery posture against ransomware.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── M365 ── -->
+  <div class="sticky-section">
+    <div class="sticky-dot" style="background:var(--gold)"></div>
+    <div>
+      <div class="sticky-label">Microsoft 365 — Exchange, OneDrive, SharePoint, Teams</div>
+      <div class="sticky-sublabel">Foundation Edition · Currently Owned · Over-Consumed</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Section 03 — Microsoft 365</div>
+    <h2 class="section-title">M365 Protection — Foundation vs Enterprise Edition</h2>
+    <p class="section-desc">Par Pacific's M365 environment is protected under <strong>Foundation Edition</strong>. Usage significantly exceeds entitlement for both user count and capacity. A DPC credit is currently available. Upgrading to Enterprise Edition would add anomaly detection, threat hunting, and eDiscovery/Legal Hold for M365 data.</p>
+
+    <div class="alert-banner red">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-text"><strong>Over-Consumption Alert — Users & FEGB Capacity</strong> 1,923 M365 user licenses consumed against 1,000 entitled (92.3% overage). FEGB consumed is 64,205GB against 20,000GB entitled (221% overage). Immediate remediation discussion required.</div>
+    </div>
+
+    <div class="alert-banner green">
+      <div class="alert-icon">✅</div>
+      <div class="alert-text"><strong>DPC Credit Eligible</strong> Based on total DPC consumption of 74,256GB, Par Pacific qualifies for a Data Protection Credit at this time. Factor into renewal and expansion negotiations.</div>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feature-col" style="width:42%">M365 Capability</th>
+            <th class="owned">Foundation Edition <span class="badge-owned">OWNED</span></th>
+            <th class="upgrade">✦ Enterprise Edition <span class="badge-upgrade">UPGRADE</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="feature-cat">Core M365 Workload Coverage</td></tr>
+          <tr><td class="feature-name">Exchange Online Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">OneDrive Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">SharePoint Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Microsoft Teams Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Item-Level Granular Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">SLA Policy-Driven Retention</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Self-Service Recovery Portal</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+          <tr><td class="feature-name">Role-Based Access Control</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+          <tr><td colspan="3" class="feature-cat">Cyber Security for M365 (Enterprise Only)</td></tr>
+          <tr class="highlight-row"><td class="feature-name">Anomaly Detection for M365 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Threat Hunting across M365 Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery in M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard (M365)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+
+          <tr><td colspan="3" class="feature-cat">Compliance & Governance (Enterprise Only)</td></tr>
+          <tr class="highlight-row"><td class="feature-name">eDiscovery & Legal Hold for M365 Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+          <tr class="highlight-row"><td class="feature-name">Compliance Reporting for M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── IDENTITY ── -->
+  <div class="sticky-section">
+    <div class="sticky-dot" style="background:#f472b6"></div>
+    <div>
+      <div class="sticky-label">Identity Protection — Active Directory & Entra ID</div>
+      <div class="sticky-sublabel">Not Currently Owned · Expansion Opportunity</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Section 04 — Identity Recovery & Resilience</div>
+    <h2 class="section-title">Identity Protection — Current Coverage vs Dedicated Identity SKUs</h2>
+    <p class="section-desc">Par Pacific's on-prem Enterprise licenses and cloud Foundation licenses protect AD and Entra ID users and groups as backup objects — but do not provide orchestrated forest recovery, Entra ID enhanced protection, or proactive identity threat detection. The table below compares current coverage against Rubrik's dedicated Identity SKUs.</p>
+
+    <div class="alert-banner blue">
+      <div class="alert-icon">🔑</div>
+      <div class="alert-text"><strong>Identity is the #1 Ransomware Attack Vector</strong> Active Directory compromise is the most common lateral movement path in enterprise ransomware. Par Pacific protects AD user and group objects today — but has no orchestrated forest recovery capability. A single AD forest outage could halt all on-prem operations. Rubrik Identity Recovery or Resilience directly addresses this gap.</div>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feature-col" style="width:28%">Capability</th>
+            <th style="border-top:2px solid var(--rubrik-cyan)">On-Prem<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Enterprise Ed. (Owned)</span></th>
+            <th style="border-top:2px solid var(--accent3)">Cloud (AWS)<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Foundation Ed. (Owned)</span></th>
+            <th class="upgrade">Identity Recovery<br><span class="badge-upgrade">NOT OWNED</span></th>
+            <th class="upgrade" style="border-top-color:#f472b6">Identity Resilience<br><span class="badge-upgrade">NOT OWNED</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" class="feature-cat">Active Directory (On-Prem)</td></tr>
+          <tr>
+            <td class="feature-name">AD Users & Groups Protection</td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">AD Object-Level Recovery</td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">Orchestrated AD Forest Recovery</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">AD Change Monitoring & Rollback</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">Continuous AD Replication Monitoring</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">AD Threat Detection & Alerting</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+
+          <tr><td colspan="5" class="feature-cat">Entra ID (Azure AD)</td></tr>
+          <tr>
+            <td class="feature-name">Entra ID Users & Groups Protection</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">Entra ID Enhanced Protection</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">Conditional Access Policy Recovery</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">Hybrid AD + Entra Unified Recovery</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="feature-name">Entra ID Threat Detection & Alerting</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center"><span class="check">✔</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout-grid">
+      <div class="callout upgrade">
+        <div class="callout-icon">🛡️</div>
+        <div class="callout-title">Identity Recovery SKU</div>
+        <div class="callout-body">Purpose-built for AD and Entra ID recovery. Adds orchestrated forest-level recovery, Entra ID enhanced protection, conditional access policy recovery, and hybrid identity restoration — critical for ransomware recovery scenarios.</div>
+      </div>
+      <div class="callout upgrade">
+        <div class="callout-icon">🔭</div>
+        <div class="callout-title">Identity Resilience SKU</div>
+        <div class="callout-body">Everything in Identity Recovery, plus proactive threat detection: continuous monitoring of AD replication health, change alerting, and Entra ID anomaly detection — to prevent identity attacks before they succeed.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END PRESENTATION -->
+
+
+<!-- ══════════════════════ DASHBOARD ══════════════════════ -->
+<div id="view-dashboard" class="view">
+
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">Par Pacific — Rubrik Utilization Dashboard</div>
+      <div class="dash-meta">Entitlement & Consumption Overview · All Clusters & SKUs · Code: 9.4.3-P1</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span class="badge-owned">● Enterprise On-Prem</span>
+      <span style="font-size:0.72rem;color:var(--gold);background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:20px;padding:3px 10px;">⚠ M365 Over-consumed</span>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- ON-PREM -->
+    <div class="dash-section-title">On-Prem Clusters — Rubrik Secure Vault (Enterprise Edition)</div>
+
+    <div class="kpi-grid">
+      <div class="kpi ok">
+        <div class="kpi-label">Clusters Online</div>
+        <div class="kpi-val">5 / 5</div>
+        <div class="kpi-sub ok">All clusters reachable</div>
+      </div>
+      <div class="kpi warn">
+        <div class="kpi-label">Total Consumed</div>
+        <div class="kpi-val">104.2 TB</div>
+        <div class="kpi-sub warn">of 142.3 TB usable</div>
+      </div>
+      <div class="kpi warn">
+        <div class="kpi-label">Fleet Utilization</div>
+        <div class="kpi-val">73.2%</div>
+        <div class="kpi-sub warn">2 clusters critical</div>
+      </div>
+      <div class="kpi info">
+        <div class="kpi-label">RCV Licensed</div>
+        <div class="kpi-val">100 TB</div>
+        <div class="kpi-sub">Archive capacity ready</div>
+      </div>
+    </div>
+
+    <table class="cluster-table">
+      <thead>
+        <tr>
+          <th>Cluster</th><th>Model</th><th>Code</th><th>Consumed</th><th>Usable</th><th style="min-width:160px">Utilization</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="cluster-name">HI-PCNRUBK01</div></td>
+          <td><div class="cluster-model">R6304</div></td>
+          <td><span class="cluster-version">9.4.3-P1</span></td>
+          <td>1.62 TB</td><td>11.27 TB</td>
+          <td><div style="display:flex;align-items:center;gap:8px;"><div class="prog-track" style="flex:1;margin:0"><div class="prog-bar ok" style="width:14%"></div></div><span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--green);min-width:36px">14%</span></div></td>
+          <td><span style="color:var(--green);font-size:0.78rem">● Healthy</span></td>
+        </tr>
+        <tr>
+          <td><div class="cluster-name">HIRUBK01</div></td>
+          <td><div class="cluster-model">R6404</div></td>
+          <td><span class="cluster-version">9.4.3-P1</span></td>
+          <td>22.72 TB</td><td>30 TB</td>
+          <td><div style="display:flex;align-items:center;gap:8px;"><div class="prog-track" style="flex:1;margin:0"><div class="prog-bar warn" style="width:76%"></div></div><span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--gold);min-width:36px">76%</span></div></td>
+          <td><span style="color:var(--gold);font-size:0.78rem">● Moderate</span></td>
+        </tr>
+        <tr>
+          <td><div class="cluster-name">MTRUBK01</div></td>
+          <td><div class="cluster-model">R6408</div></td>
+          <td><span class="cluster-version">9.4.3-P1</span></td>
+          <td>57.32 TB</td><td>60 TB</td>
+          <td><div style="display:flex;align-items:center;gap:8px;"><div class="prog-track" style="flex:1;margin:0"><div class="prog-bar crit" style="width:96%"></div></div><span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--red);min-width:36px">96%</span></div></td>
+          <td><span style="color:var(--red);font-size:0.78rem">● Critical</span></td>
+        </tr>
+        <tr>
+          <td><div class="cluster-name">NCRUBK01</div></td>
+          <td><div class="cluster-model">R6304</div></td>
+          <td><span class="cluster-version">9.4.3-P1</span></td>
+          <td>10.86 TB</td><td>11 TB</td>
+          <td><div style="display:flex;align-items:center;gap:8px;"><div class="prog-track" style="flex:1;margin:0"><div class="prog-bar crit" style="width:99%"></div></div><span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--red);min-width:36px">99%</span></div></td>
+          <td><span style="color:var(--red);font-size:0.78rem">● Critical</span></td>
+        </tr>
+        <tr>
+          <td><div class="cluster-name">WARUBRIK01</div></td>
+          <td><div class="cluster-model">R6404</div></td>
+          <td><span class="cluster-version">9.4.3-P1</span></td>
+          <td>11.7 TB</td><td>30 TB</td>
+          <td><div style="display:flex;align-items:center;gap:8px;"><div class="prog-track" style="flex:1;margin:0"><div class="prog-bar ok" style="width:39%"></div></div><span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--green);min-width:36px">39%</span></div></td>
+          <td><span style="color:var(--green);font-size:0.78rem">● Healthy</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-banner red">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-text"><strong>Immediate Action Required — MTRUBK01 & NCRUBK01</strong> MTRUBK01 is at 96% (57.32/60TB) and NCRUBK01 is at 99% (10.86/11TB). Archive older recovery points to Rubrik Cloud Vault (100TB licensed) immediately to recover usable cluster capacity and avoid SLA failures.</div>
+    </div>
+
+    <!-- M365 -->
+    <div class="dash-section-title" style="margin-top:2rem">Microsoft 365 — Foundation Edition</div>
+
+    <div class="kpi-grid">
+      <div class="kpi crit">
+        <div class="kpi-label">Users Consumed</div>
+        <div class="kpi-val">1,923</div>
+        <div class="kpi-sub crit">of 1,000 entitled (+92.3%)</div>
+      </div>
+      <div class="kpi crit">
+        <div class="kpi-label">FEGB Consumed</div>
+        <div class="kpi-val">64,205 GB</div>
+        <div class="kpi-sub crit">of 20,000 GB entitled (+221%)</div>
+      </div>
+      <div class="kpi info">
+        <div class="kpi-label">DPC Consumed</div>
+        <div class="kpi-val">74,256 GB</div>
+        <div class="kpi-sub ok">✔ DPC Credit Eligible</div>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-title">M365 Entitlement vs. Consumption</div>
+      <div class="prog-label"><span>M365 Users</span><span>1,923 consumed / 1,000 entitled</span></div>
+      <div class="prog-track"><div class="prog-bar crit" style="width:100%"></div></div>
+      <div class="prog-label"><span>FEGB Capacity</span><span>64,205 GB consumed / 20,000 GB entitled</span></div>
+      <div class="prog-track"><div class="prog-bar crit" style="width:100%"></div></div>
+      <div class="prog-label"><span>DPC Basis</span><span>74,256 GB total DPC consumed</span></div>
+      <div class="prog-track" style="margin-bottom:0"><div class="prog-bar warn" style="width:65%"></div></div>
+    </div>
+
+    <!-- CLOUD -->
+    <div class="dash-section-title" style="margin-top:2rem">Cloud Workloads — AWS (Foundation Edition · Universal Cloud License)</div>
+
+    <div class="kpi-grid">
+      <div class="kpi info">
+        <div class="kpi-label">UCL Entitlement</div>
+        <div class="kpi-val">2,048 GB</div>
+        <div class="kpi-sub">2TB Universal Cloud License</div>
+      </div>
+      <div class="kpi crit">
+        <div class="kpi-label">Total Consumed</div>
+        <div class="kpi-val">6,917 GB</div>
+        <div class="kpi-sub crit">of 2,048 GB entitled (338%)</div>
+      </div>
+      <div class="kpi crit">
+        <div class="kpi-label">Overage</div>
+        <div class="kpi-val">4,869 GB</div>
+        <div class="kpi-sub crit">Unlicensed consumption</div>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-title">Universal Cloud License — Workload Consumption vs. 2TB Entitlement</div>
+
+      <div class="prog-label"><span>SAP HANA Databases</span><span>5,500 GB</span></div>
+      <div class="prog-track"><div class="prog-bar crit" style="width:100%"></div></div>
+
+      <div class="prog-label"><span>SQL Databases</span><span>1,200 GB</span></div>
+      <div class="prog-track"><div class="prog-bar crit" style="width:100%"></div></div>
+
+      <div class="prog-label"><span>Active Directory Domain Controllers</span><span>197 GB</span></div>
+      <div class="prog-track"><div class="prog-bar warn" style="width:100%"></div></div>
+
+      <div class="prog-label"><span>EC2 Instances</span><span>20 GB</span></div>
+      <div class="prog-track"><div class="prog-bar ok" style="width:100%"></div></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;padding-top:0.75rem;border-top:1px solid var(--border);">
+        <span style="font-size:0.8rem;font-weight:600;">Total Consumed</span>
+        <span style="font-family:'DM Mono',monospace;font-size:0.82rem;">
+          <span style="color:var(--red)">6,917 GB used</span>
+          <span style="color:var(--text3);margin:0 6px">/</span>
+          <span style="color:var(--text2)">2,048 GB entitled</span>
+          <span style="color:var(--red);margin-left:8px;font-weight:600">(338% over)</span>
+        </span>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text3);margin-top:0.5rem;">All bars shown at maximum — each workload alone would exceed the 2TB entitlement when combined with others. Total overage is 4,869GB.</div>
+    </div>
+
+    <div class="alert-banner warn">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text"><strong>Cloud Entitlement Significantly Exceeded — Expansion Required</strong> Par Pacific's 2TB (2,048GB) Universal Cloud License is consumed 338% over entitlement. Combined protected workloads total 6,917GB across SAP HANA (5,500GB), SQL Databases (1,200GB), Active Directory Domain Controllers (197GB), and EC2 Instances (20GB). A cloud license expansion conversation is strongly recommended.</div>
+    </div>
+
+    <!-- IDENTITY -->
+    <div class="dash-section-title" style="margin-top:2rem">Identity Protection — Gap Analysis</div>
+
+    <div class="kpi-grid">
+      <div class="kpi warn">
+        <div class="kpi-label">AD Users & Groups</div>
+        <div class="kpi-val">Protected</div>
+        <div class="kpi-sub warn">Via Enterprise Ed. only</div>
+      </div>
+      <div class="kpi warn">
+        <div class="kpi-label">Entra ID Users</div>
+        <div class="kpi-val">Protected</div>
+        <div class="kpi-sub warn">Via Foundation Ed. (Cloud)</div>
+      </div>
+      <div class="kpi crit">
+        <div class="kpi-label">AD Forest Recovery</div>
+        <div class="kpi-val">Not Covered</div>
+        <div class="kpi-sub crit">No Identity SKU owned</div>
+      </div>
+      <div class="kpi crit">
+        <div class="kpi-label">Entra Enhanced</div>
+        <div class="kpi-val">Not Covered</div>
+        <div class="kpi-sub crit">No Identity SKU owned</div>
+      </div>
+    </div>
+
+    <div class="alert-banner blue">
+      <div class="alert-icon">🔑</div>
+      <div class="alert-text"><strong>Identity Recovery / Resilience — Recommended Expansion</strong> Par Pacific has no orchestrated AD forest recovery or Entra ID enhanced protection. Given 197GB of Active Directory Domain Controllers actively protected in AWS, a hybrid identity recovery failure scenario is a real risk. A dedicated Identity SKU (Recovery or Resilience) directly closes this gap.</div>
+    </div>
+
+  </div>
+</div>
+<!-- END DASHBOARD -->
+
+<script>
+  function showView(name, btn) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
