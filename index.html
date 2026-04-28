@@ -84,6 +84,9 @@
 
   /* TABLE */
   .compare-wrap { overflow-x: auto; margin-bottom: 2rem; }
+  /* Allow tooltips on all comparison slides to escape table cells without horizontal scroll clipping when not needed */
+  #slide-1 .compare-wrap, #slide-2 .compare-wrap, #slide-3 .compare-wrap, #slide-4 .compare-wrap { overflow: visible; }
+  #slide-1 .compare-table td, #slide-2 .compare-table td, #slide-3 .compare-table td, #slide-4 .compare-table td { overflow: visible; }
   .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
   .compare-table th { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; padding: 1rem 1.2rem; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
   .compare-table th.owned { background: linear-gradient(135deg, rgba(0,100,204,0.15), rgba(0,200,255,0.08)); border-top: 2px solid var(--rubrik-cyan); color: var(--rubrik-cyan); }
@@ -238,6 +241,181 @@
   .agenda-label { font-weight: 500; font-size: 0.85rem; }
   .agenda-sub { font-size: 0.73rem; color: var(--text2); margin-top: 1px; }
   .agenda-badge { margin-left: auto; font-size: 0.66rem; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+
+  /* ── TOOLTIPS ── */
+  .feature-name.has-tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dashed var(--text3);
+    display: inline-block;
+  }
+  .feature-name.has-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 8px);
+    z-index: 200;
+    background: #050810;
+    color: var(--text);
+    border: 1px solid var(--rubrik-cyan);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.5;
+    width: 320px;
+    max-width: 90vw;
+    white-space: normal;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,200,255,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+    pointer-events: none;
+  }
+  .feature-name.has-tip::before {
+    content: '';
+    position: absolute;
+    left: 18px; top: 100%;
+    z-index: 201;
+    border: 6px solid transparent;
+    border-bottom-color: var(--rubrik-cyan);
+    margin-top: 2px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.18s, visibility 0.18s;
+  }
+  .feature-name.has-tip:hover::after,
+  .feature-name.has-tip:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* ── EXPANDABLE WORKLOADS SECTION ── */
+  .workloads-toggle {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(0,100,204,0.12), rgba(124,58,237,0.08));
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 1.5rem;
+  }
+  .workloads-toggle:hover {
+    border-color: var(--rubrik-cyan);
+    background: linear-gradient(135deg, rgba(0,100,204,0.2), rgba(124,58,237,0.14));
+    transform: translateY(-1px);
+  }
+  .workloads-toggle .arrow {
+    display: inline-block;
+    transition: transform 0.3s;
+    font-size: 0.85rem;
+    color: var(--rubrik-cyan);
+  }
+  .workloads-toggle.open .arrow { transform: rotate(180deg); }
+
+  .workloads-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .workloads-panel.open { max-height: 3000px; }
+
+  .workloads-inner {
+    padding: 1.5rem 0 0.5rem;
+  }
+
+  .workload-cat-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 1.4rem 0 0.7rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .workload-cat-title:first-child { margin-top: 0; }
+  .workload-cat-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .workload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .workload-pill {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: help;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .workload-pill:hover { border-color: var(--rubrik-cyan); background: var(--surface2); }
+  .workload-pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rubrik-cyan); flex-shrink: 0;
+  }
+  .workload-pill[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 8px);
+    z-index: 200;
+    background: #050810;
+    color: var(--text);
+    border: 1px solid var(--rubrik-cyan);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.76rem;
+    font-weight: 400;
+    line-height: 1.5;
+    width: 280px;
+    max-width: 90vw;
+    white-space: normal;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,200,255,0.1);
+    opacity: 0; visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+    pointer-events: none;
+  }
+  .workload-pill[data-tip]::before {
+    content: '';
+    position: absolute;
+    left: 18px; top: 100%;
+    z-index: 201;
+    border: 6px solid transparent;
+    border-bottom-color: var(--rubrik-cyan);
+    margin-top: 2px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.18s, visibility 0.18s;
+  }
+  .workload-pill[data-tip]:hover::after,
+  .workload-pill[data-tip]:hover::before {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+
+  .protected-tag {
+    margin-left: auto;
+    font-size: 0.62rem;
+    font-family: 'DM Mono', monospace;
+    background: rgba(16,217,142,0.12);
+    border: 1px solid rgba(16,217,142,0.3);
+    color: var(--green);
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
 </style>
 </head>
 <body>
@@ -388,30 +566,103 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td colspan="3" class="feature-cat">Core Data Protection</td></tr>
-            <tr><td class="feature-name">Backup & Recovery (VMs, DBs, NAS, Physical)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Application-Consistent Snapshots</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Instant Recovery via Live Mount</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">SLA Policy Engine (Automated Retention)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Immutable Backup Architecture</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Role-Based Access Control (RBAC)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Cloud Archival (S3, Azure, GCP)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Rubrik Cloud Vault (RCV) Integration</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td colspan="3" class="feature-cat">Ransomware & Cyber Security (Enterprise Only)</td></tr>
-            <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Threat Hunting (IOC Search across Backups)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (DSPM)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Threat Containment & Quarantine</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Blueprints)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Compliance Reporting (SOC2, HIPAA, PCI)</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Legal Hold</td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">Data Protection</td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Comprehensive backup and recovery for on-prem enterprise applications, virtualized environments (VMware, Hyper-V, Nutanix AHV), physical servers, NAS shares, and unstructured file/object data — all under a single SLA policy framework.">Enterprise, Cloud, SaaS, and Unstructured Data Protection</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Restore thousands of on-prem VMs, files, or databases in parallel after a large-scale event like ransomware. Significantly reduces RTO compared to serial recovery operations across the data center.">Mass Recovery</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+            <tr><td colspan="3" class="feature-cat">Data Threat Analytics (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="ML-based detection that identifies unusual changes in on-prem backup data — sudden encryption, mass deletions, or abnormal modification patterns across VMs, file systems, and databases — to flag potential ransomware activity early in the kill chain.">Anomaly & Encryption Detection</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Search across all on-prem backup snapshots for indicators of compromise (IOCs) — file hashes, YARA rules, or strings — to identify when malware first entered the data center and find clean recovery points.">Advanced Threat Hunting</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Lightning-fast IOC scans across the entire on-prem backup estate at once — purpose-built for scale across all clusters. Where Advanced Threat Hunting deeply analyzes targeted snapshots, Turbo Threat Hunting rapidly sweeps every protected workload to identify malware presence in minutes, not hours.">Turbo Threat Hunting</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Continuously scan on-prem backup data for known malware signatures and threat intelligence updates, alerting administrators when threats are detected within protected snapshots before recovery operations begin.">Threat Monitoring</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+
+            <tr><td colspan="3" class="feature-cat">Data Security Posture</td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Discover and classify sensitive data (PII, PHI, PCI, financial records) across all on-prem protected workloads — file shares, databases, VMs — identifying where regulated data lives and who has access to it for compliance and risk reduction.">Sensitive Data Monitoring</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Centralized dashboard providing a unified view of data security posture, risk exposure, threats, and compliance status across the entire Rubrik-protected on-prem estate.">Data Security Command Center</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+            <tr><td colspan="3" class="feature-cat">Cyber Recovery (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Quarantine and isolate infected on-prem backup snapshots so they cannot be restored accidentally during a recovery operation — preventing reinfection of clean production environments.">Threat Containment</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Run non-disruptive recovery rehearsals in an isolated environment to validate on-prem recovery procedures, RTOs, and application functionality without impacting production data center systems.">Cyber Recovery Simulation</span></td><td><span class="check">✔</span></td><td><span class="cross">—</span></td></tr>
           </tbody>
         </table>
       </div>
       <div class="opportunity">
         <div class="opportunity-title">💡 Rubrik Cloud Vault — 100TB Archive Opportunity</div>
         <div class="opportunity-body">Par Pacific has licensed <strong>100TB of Rubrik Cloud Vault (RCV)</strong>, which can immediately archive older recovery points from on-prem clusters. RCV provides AES-256 encryption, data compression, and Rubrik-managed immutability with no manual tiering required. MTRUBK01 (96% full) and NCRUBK01 (99% full) should be prioritized for immediate archival to RCV.</div>
+      </div>
+
+      <!-- Supported On-Prem Workloads Toggle -->
+      <button class="workloads-toggle" id="onprem-workloads-toggle" onclick="toggleOnPremWorkloads()">
+        <span>🏢 Supported On-Prem Workloads</span>
+        <span class="arrow">▼</span>
+      </button>
+
+      <div class="workloads-panel" id="onprem-workloads-panel">
+        <div class="workloads-inner">
+
+          <div class="workload-cat-title">Hypervisors & Virtualization</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="VMware vSphere — industry-leading protection for ESXi VMs with CBT-based incrementals, application-consistent snapshots, and instant recovery via Live Mount."><span class="dot"></span>VMware vSphere<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Microsoft Hyper-V — agentless protection for Windows-based hypervisor environments with RCT-based incremental backups and granular VM/file recovery."><span class="dot"></span>Microsoft Hyper-V</div>
+            <div class="workload-pill" data-tip="Nutanix AHV — native integration with Nutanix HCI environments for VM-level protection without additional agents."><span class="dot"></span>Nutanix AHV</div>
+            <div class="workload-pill" data-tip="NEW — Proxmox Virtual Environment support announced by Rubrik. Protect open-source KVM-based VMs in Proxmox VE clusters with snapshot-based backups and recovery."><span class="dot" style="background:var(--gold)"></span>Proxmox VE<span class="protected-tag" style="background:rgba(245,166,35,0.12);border-color:rgba(245,166,35,0.3);color:var(--gold)">NEW</span></div>
+            <div class="workload-pill" data-tip="Red Hat OpenShift Virtualization — KubeVirt-based virtualization running natively on OpenShift, allowing organizations to run VMs alongside containers on a unified platform. Rubrik provides VM-level backup and recovery for these workloads."><span class="dot"></span>OpenShift Virtualization</div>
+            <div class="workload-pill" data-tip="Oracle Linux Virtualization Manager (OLVM) — Oracle's enterprise virtualization platform built on KVM and oVirt. Rubrik delivers VM-level protection for OLVM environments with snapshot-based backup and recovery."><span class="dot"></span>OLVM</div>
+          </div>
+
+          <div class="workload-cat-title">Databases — Relational</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Microsoft SQL Server — log-aware, application-consistent backups with Always On AG support, point-in-time recovery, and granular database/table restore."><span class="dot"></span>Microsoft SQL Server<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Oracle Database — RMAN-integrated backups with archive log management, Data Guard awareness, and granular tablespace/PDB recovery."><span class="dot"></span>Oracle Database</div>
+            <div class="workload-pill" data-tip="SAP HANA — log-aware, application-consistent backups for in-memory analytics databases with point-in-time recovery and tenant-aware protection."><span class="dot"></span>SAP HANA<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="IBM Db2 — application-consistent backup and recovery for Db2 LUW databases with transaction log shipping support."><span class="dot"></span>IBM Db2</div>
+            <div class="workload-pill" data-tip="PostgreSQL — open-source relational database protection with WAL-based point-in-time recovery and consistent multi-database backups."><span class="dot"></span>PostgreSQL</div>
+            <div class="workload-pill" data-tip="MySQL and MariaDB — application-consistent backups with binary log integration for granular recovery to any point in time."><span class="dot"></span>MySQL / MariaDB</div>
+            <div class="workload-pill" data-tip="SAP on Oracle — protection for SAP application landscapes running on Oracle databases with BR*Tools integration."><span class="dot"></span>SAP on Oracle</div>
+          </div>
+
+          <div class="workload-cat-title">Databases — NoSQL & Distributed</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="MongoDB — distributed NoSQL document database protection with replica-set aware backups and consistent cluster recovery."><span class="dot"></span>MongoDB</div>
+            <div class="workload-pill" data-tip="Apache Cassandra — token-aware backup for distributed wide-column NoSQL clusters with consistent ring recovery."><span class="dot"></span>Apache Cassandra</div>
+            <div class="workload-pill" data-tip="Microsoft Exchange Server — granular mailbox, message, and database recovery for on-prem Exchange deployments with DAG awareness."><span class="dot"></span>Microsoft Exchange</div>
+          </div>
+
+          <div class="workload-cat-title">NAS & File Storage</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="NetApp ONTAP — direct integration with NetApp filers for snapshot-based backups, SnapDiff API support, and granular file recovery."><span class="dot"></span>NetApp NAS</div>
+            <div class="workload-pill" data-tip="Dell EMC Isilon (PowerScale), VNX, Unity — multi-protocol NAS protection with changelist-based incremental backups."><span class="dot"></span>Dell EMC NAS</div>
+            <div class="workload-pill" data-tip="Pure Storage FlashBlade — high-performance NAS protection with fast snapshot-based backups for unstructured data."><span class="dot"></span>Pure FlashBlade</div>
+            <div class="workload-pill" data-tip="Generic NFS and SMB/CIFS shares — protect file shares from any vendor's NAS or file server with full and incremental backups."><span class="dot"></span>Generic NAS (NFS/SMB)</div>
+            <div class="workload-pill" data-tip="Qumulo, Hitachi NAS, Huawei OceanStor — additional NAS platform support for diverse storage estates."><span class="dot"></span>Other NAS Platforms</div>
+          </div>
+
+          <div class="workload-cat-title">Object & Unstructured Storage</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Generic S3-compatible object storage — protect on-prem object stores like MinIO, Cloudian, Scality, and others with versioned, immutable backups."><span class="dot"></span>S3-Compatible Object</div>
+            <div class="workload-pill" data-tip="Dell EMC ECS — Elastic Cloud Storage object store protection with multi-protocol access support."><span class="dot"></span>Dell EMC ECS</div>
+          </div>
+
+          <div class="workload-cat-title">Physical Servers</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Windows physical servers — agent-based file, volume, and bare-metal recovery for non-virtualized Windows workloads."><span class="dot"></span>Windows Physical</div>
+            <div class="workload-pill" data-tip="Linux physical servers — agent-based protection for RHEL, CentOS, Ubuntu, SUSE, and other Linux distributions with file and volume recovery."><span class="dot"></span>Linux Physical</div>
+            <div class="workload-pill" data-tip="AIX, Solaris, HP-UX — protection for legacy enterprise UNIX platforms with agent-based file system backups."><span class="dot"></span>UNIX (AIX / Solaris / HP-UX)</div>
+          </div>
+
+          <div class="workload-cat-title">Identity & Directory Services</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="On-prem Active Directory Domain Controllers — protect AD forests, users, groups, GPOs, and schema with object-level recovery and forest-aware restoration (forest recovery requires Identity SKU)."><span class="dot"></span>Active Directory<span class="protected-tag">PROTECTED</span></div>
+          </div>
+
+          <div class="workload-cat-title">Containers & Modern Apps</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Red Hat OpenShift — namespace, persistent volume, and full cluster-level backup with application-aware recovery for on-prem Kubernetes."><span class="dot"></span>Red Hat OpenShift</div>
+            <div class="workload-pill" data-tip="VMware Tanzu (TKG) — Kubernetes protection for vSphere with Tanzu deployments including persistent volumes and stateful applications."><span class="dot"></span>VMware Tanzu</div>
+            <div class="workload-pill" data-tip="Self-managed on-prem Kubernetes clusters — generic CNCF-compliant protection for any distribution including Rancher, kubeadm, and vanilla K8s."><span class="dot"></span>Generic Kubernetes</div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -440,32 +691,92 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td colspan="3" class="feature-cat">Core Cloud Protection</td></tr>
-            <tr><td class="feature-name">EC2 Instance Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">RDS / Aurora Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">SAP HANA on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">SQL Server on Cloud (AWS)</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">SLA Policy-Driven Protection</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Immutable Cloud Backups</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td colspan="3" class="feature-cat">Cyber Security for Cloud (Enterprise Only)</td></tr>
-            <tr class="highlight-row"><td class="feature-name">ML-Based Anomaly Detection (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Threat Hunting across Cloud Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery (Cloud DSPM)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Threat Containment for Cloud Workloads</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Cyber Recovery Orchestration (Cloud)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Compliance Reporting for Cloud</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td colspan="3" class="feature-cat">EC2 Snapshot Optimization via Rubrik Cloud Vault</td></tr>
-            <tr><td class="feature-name">Native AWS Snapshot Support</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Replace Snapshots with RCV (Immutable + Compressed)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Automated Tiering via SLA (no manual config)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">~40% Cost Reduction vs Native AWS Snapshots</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">AES-256 Encryption + Immutability for EC2 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td colspan="3" class="feature-cat">Data Protection</td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Comprehensive backup and recovery for enterprise applications, cloud workloads (AWS, Azure, GCP), SaaS platforms (M365, Salesforce), and unstructured file/object data — all under a single SLA policy framework.">Enterprise, Cloud, SaaS, and Unstructured Data Protection</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Restore thousands of VMs, files, or objects in parallel after a large-scale event like ransomware. Significantly reduces RTO compared to serial recovery operations.">Mass Recovery</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+            <tr><td colspan="3" class="feature-cat">Data Threat Analytics (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="ML-based detection that identifies unusual changes in backup data — sudden encryption, mass deletions, or abnormal modification patterns — to flag potential ransomware activity early in the kill chain.">Anomaly & Encryption Detection</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Search across all backup snapshots for indicators of compromise (IOCs) — file hashes, YARA rules, or strings — to identify when malware first entered the environment and find clean recovery points.">Advanced Threat Hunting</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Lightning-fast IOC scans across the entire backup estate at once — purpose-built for scale. Where Advanced Threat Hunting deeply analyzes targeted snapshots, Turbo Threat Hunting rapidly sweeps every protected workload to identify malware presence in minutes, not hours.">Turbo Threat Hunting</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Continuously scan backup data for known malware signatures and threat intelligence updates, alerting administrators when threats are detected within protected snapshots.">Threat Monitoring</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+
+            <tr><td colspan="3" class="feature-cat">Data Security Posture</td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Discover and classify sensitive data (PII, PHI, PCI, financial records) across all protected workloads, identifying where regulated data lives and who has access to it for compliance and risk reduction.">Sensitive Data Monitoring</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Centralized dashboard providing a unified view of data security posture, risk exposure, threats, and compliance status across the entire Rubrik-protected estate.">Data Security Command Center</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+
+            <tr><td colspan="3" class="feature-cat">Cyber Recovery (Enterprise Only)</td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Quarantine and isolate infected backup snapshots so they cannot be restored accidentally during a recovery operation — preventing reinfection of clean environments.">Threat Containment</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Run non-disruptive recovery rehearsals in an isolated environment to validate recovery procedures, RTOs, and application functionality without impacting production systems.">Cyber Recovery Simulation</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
           </tbody>
         </table>
       </div>
-      <div class="callout-grid">
-        <div class="callout warning"><div class="callout-icon">💸</div><div class="callout-title">The EC2 Snapshot Problem</div><div class="callout-body">Native AWS snapshots carry no compression, no encryption, and no immutability. They typically cost ~40% more than RCV alternatives, and require manual tiering policies that never fully eliminate snapshot spend.</div></div>
-        <div class="callout success"><div class="callout-icon">🛡️</div><div class="callout-title">RCV as Snapshot Replacement</div><div class="callout-body">Rubrik Cloud Vault replaces EC2 snapshots with compressed, encrypted, immutable backups under a single SLA policy — eliminating snapshot costs and hardening recovery posture against ransomware.</div></div>
+
+      <!-- Supported Workloads Toggle -->
+      <button class="workloads-toggle" id="workloads-toggle" onclick="toggleWorkloads()">
+        <span>☁️ Supported Cloud Workloads</span>
+        <span class="arrow">▼</span>
+      </button>
+
+      <div class="workloads-panel" id="workloads-panel">
+        <div class="workloads-inner">
+
+          <div class="workload-cat-title">Compute & Virtual Machines</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Amazon Elastic Compute Cloud — backup and recovery of EC2 instances including boot volumes and attached EBS volumes with application-consistent snapshots."><span class="dot"></span>AWS EC2 Instances<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Azure Virtual Machines — image and disk-level protection for Windows and Linux VMs running in Microsoft Azure with crash and application-consistent snapshots."><span class="dot"></span>Azure VMs</div>
+            <div class="workload-pill" data-tip="Google Compute Engine VM instances — protect VMs running in GCP with full image-based recovery and granular file-level restore."><span class="dot"></span>GCP Compute Engine</div>
+            <div class="workload-pill" data-tip="VMware Cloud on AWS — protection for VMs running in VMC SDDC environments using the same Rubrik vSphere integration as on-prem."><span class="dot"></span>VMware Cloud on AWS</div>
+          </div>
+
+          <div class="workload-cat-title">Cloud Databases — Relational</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="In-memory analytics database from SAP — Rubrik provides log-aware, application-consistent backups with point-in-time recovery for SAP HANA running on AWS, Azure, or GCP."><span class="dot"></span>SAP HANA on Cloud<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Microsoft SQL Server running on cloud VMs (EC2, Azure VM) or as managed services — with log shipping, granular database recovery, and point-in-time restore."><span class="dot"></span>SQL Server on Cloud<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Open-source relational database — backup of Oracle databases running on cloud compute with RMAN integration, archive log management, and granular tablespace recovery."><span class="dot"></span>Oracle on Cloud</div>
+            <div class="workload-pill" data-tip="Amazon Relational Database Service — automated protection for managed PostgreSQL, MySQL, MariaDB, Oracle, and SQL Server instances with point-in-time recovery."><span class="dot"></span>Amazon RDS</div>
+            <div class="workload-pill" data-tip="MySQL-compatible and PostgreSQL-compatible relational database service from AWS — with cluster snapshots and granular database restoration."><span class="dot"></span>Amazon Aurora</div>
+            <div class="workload-pill" data-tip="Microsoft's fully managed cloud database service — Rubrik provides export-based backup and recovery for Azure SQL Database and Managed Instance."><span class="dot"></span>Azure SQL Database</div>
+          </div>
+
+          <div class="workload-cat-title">Cloud Databases — NoSQL & Distributed</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Distributed NoSQL document database — protection for MongoDB clusters running on cloud compute with replica-set aware backups."><span class="dot"></span>MongoDB</div>
+            <div class="workload-pill" data-tip="Highly available distributed NoSQL database — Rubrik integrates with Cassandra clusters for token-aware backup and consistent cluster recovery."><span class="dot"></span>Apache Cassandra</div>
+            <div class="workload-pill" data-tip="Fully managed NoSQL key-value and document database from AWS — table-level export and recovery with point-in-time restore."><span class="dot"></span>Amazon DynamoDB</div>
+          </div>
+
+          <div class="workload-cat-title">Storage & File Services</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Amazon Simple Storage Service — versioned, immutable backup of S3 buckets including bucket configuration, ACLs, and object metadata."><span class="dot"></span>Amazon S3</div>
+            <div class="workload-pill" data-tip="Microsoft Azure Blob Storage — backup and recovery for blob containers including hot, cool, and archive tier objects."><span class="dot"></span>Azure Blob Storage</div>
+            <div class="workload-pill" data-tip="Amazon Elastic File System — protection for shared NFS file systems with full and incremental backups and granular file recovery."><span class="dot"></span>Amazon EFS</div>
+            <div class="workload-pill" data-tip="Amazon FSx for Windows File Server, NetApp ONTAP, and Lustre — file system backups with granular restore capabilities."><span class="dot"></span>Amazon FSx</div>
+            <div class="workload-pill" data-tip="Microsoft Azure Files — managed SMB file shares with backup and granular file-level recovery."><span class="dot"></span>Azure Files</div>
+          </div>
+
+          <div class="workload-cat-title">Identity & Directory Services</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Active Directory Domain Controllers running on cloud compute — protect AD forests, users, groups, GPOs, and schema with object-level recovery."><span class="dot"></span>Active Directory (Cloud)<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Microsoft Entra ID (formerly Azure AD) — backup and recovery of cloud identity objects including users, groups, roles, and conditional access policies."><span class="dot"></span>Microsoft Entra ID<span class="protected-tag">PROTECTED</span></div>
+          </div>
+
+          <div class="workload-cat-title">Containers & Modern Apps</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Amazon Elastic Kubernetes Service — namespace, persistent volume, and full cluster-level backup with application-aware recovery."><span class="dot"></span>Amazon EKS</div>
+            <div class="workload-pill" data-tip="Azure Kubernetes Service — protection for Kubernetes workloads, persistent volumes, and stateful applications running in Azure."><span class="dot"></span>Azure AKS</div>
+            <div class="workload-pill" data-tip="Google Kubernetes Engine — backup and disaster recovery for Kubernetes resources, persistent volumes, and stateful workloads in GCP."><span class="dot"></span>Google GKE</div>
+            <div class="workload-pill" data-tip="Self-managed Kubernetes clusters — generic CNCF-compliant Kubernetes protection for any distribution including OpenShift, Rancher, and vanilla K8s."><span class="dot"></span>Generic Kubernetes</div>
+          </div>
+
+          <div class="workload-cat-title">Hybrid & Cross-Cloud</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="On-premises VMs replicated or migrated to AWS — same SLA-driven protection as native cloud workloads with cross-region recovery."><span class="dot"></span>VMware to AWS Migration</div>
+            <div class="workload-pill" data-tip="Azure VMware Solution — Rubrik protection for VMs running in dedicated Azure-hosted vSphere environments."><span class="dot"></span>Azure VMware Solution</div>
+            <div class="workload-pill" data-tip="Google Cloud VMware Engine — VMs running in GCP-hosted VMware environments with full backup and recovery integration."><span class="dot"></span>Google Cloud VMware Engine</div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -500,25 +811,55 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td colspan="3" class="feature-cat">Core M365 Workload Coverage</td></tr>
-            <tr><td class="feature-name">Exchange Online Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">OneDrive Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">SharePoint Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Microsoft Teams Backup & Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Item-Level Granular Recovery</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">SLA Policy-Driven Retention</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Self-Service Recovery Portal</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">Role-Based Access Control</td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td colspan="3" class="feature-cat">Cyber Security for M365 (Enterprise Only)</td></tr>
-            <tr class="highlight-row"><td class="feature-name">Anomaly Detection for M365 Backups</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Threat Hunting across M365 Backup Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Sensitive Data Discovery in M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Radar Cyber Recovery Dashboard (M365)</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr><td colspan="3" class="feature-cat">Compliance & Governance (Enterprise Only)</td></tr>
-            <tr class="highlight-row"><td class="feature-name">eDiscovery & Legal Hold for M365 Data</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Compliance Reporting for M365</td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Immutable, logically air-gapped, access-controlled backups for Microsoft 365 — protect Exchange, OneDrive, SharePoint, and Teams data against ransomware, insider threats, and accidental deletion.">Cyber Resilience for Microsoft 365</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Single pane of glass for all workloads (Datacenter, Cloud, SaaS) — manage and recover M365 alongside on-prem and cloud workloads from one unified console.">Unified Protection</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Achieve baseline backup using a single SLA policy with auto-discovery of new resources — automatically protect new mailboxes, sites, and Teams as they are created.">Global Policy-driven Automation</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="End-to-end encryption including BYOK (Bring Your Own Key), MFA, RBAC, audit logging, custom reports, and more — meet rigorous enterprise security and compliance requirements.">Enterprise-grade Security</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Dedicated team for customer incident response and data recovery, available 24/7/365 — Rubrik experts assist with ransomware response and recovery operations.">Rubrik Ransomware Response Team</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr><td><span class="feature-name has-tip" data-tip="Recover single or multiple items granularly, or perform mass recoveries at scale in a single operation — from individual emails to entire mailboxes, sites, or Teams.">Granular and Mass Recovery</span></td><td><span class="check">✔</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Allow users to access and perform recovery of their own Exchange and OneDrive data — reduce IT burden by empowering end users to self-restore lost emails and files.">Self-Service Restore</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Perform and orchestrate mass recoveries at scale, prioritizing business-critical data — recover the most important users, mailboxes, and sites first to minimize business impact.">Prioritized Data Recovery</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Identify and reduce sensitive data exposure and manage exfiltration risk — discover where PII, PHI, financial, and regulated data lives across M365 and who has access to it.">Sensitive Data Discovery</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
+            <tr class="highlight-row"><td><span class="feature-name has-tip" data-tip="Determine the scope of cyber attacks by detecting deletions, modifications and encryptions; pro-actively search for threats and Indicators of Compromise (IoC); continuously monitor for threats across all M365 backup data.">Anomaly Detection, Threat Hunting and Threat Monitoring</span></td><td><span class="cross">—</span></td><td><span class="check">✔</span></td></tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Supported SaaS Workloads Toggle -->
+      <button class="workloads-toggle" id="saas-workloads-toggle" onclick="toggleSaasWorkloads()">
+        <span>📨 Supported SaaS Workloads</span>
+        <span class="arrow">▼</span>
+      </button>
+
+      <div class="workloads-panel" id="saas-workloads-panel">
+        <div class="workloads-inner">
+
+          <div class="workload-cat-title">Microsoft 365</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Microsoft Exchange Online — full mailbox protection including emails, calendar, contacts, tasks, and notes with granular item-level recovery and folder-level restoration."><span class="dot"></span>Exchange Online<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="OneDrive for Business — backup of personal cloud storage including all files, folders, version history, and sharing permissions for every user."><span class="dot"></span>OneDrive for Business<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Microsoft SharePoint Online — protection for site collections, document libraries, lists, pages, and metadata with granular site-level and item-level recovery."><span class="dot"></span>SharePoint Online<span class="protected-tag">PROTECTED</span></div>
+            <div class="workload-pill" data-tip="Microsoft Teams — backup of channels, conversations, files, tabs, and team settings with the ability to recover individual chats, files, or entire teams."><span class="dot"></span>Microsoft Teams<span class="protected-tag">PROTECTED</span></div>
+          </div>
+
+          <div class="workload-cat-title">Identity (SaaS)</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Microsoft Entra ID (formerly Azure AD) — backup and recovery of cloud identity objects including users, groups, roles, and conditional access policies. Enhanced protection available via Identity Recovery/Resilience SKU."><span class="dot"></span>Microsoft Entra ID<span class="protected-tag">PROTECTED</span></div>
+          </div>
+
+          <div class="workload-cat-title">CRM & Business Apps</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Salesforce — comprehensive backup of standard and custom objects, attachments, files, metadata, and configuration with granular record-level recovery and sandbox seeding capabilities."><span class="dot"></span>Salesforce</div>
+            <div class="workload-pill" data-tip="Microsoft Dynamics 365 — protection for CRM data including accounts, contacts, opportunities, cases, and custom entities with metadata-aware recovery."><span class="dot"></span>Microsoft Dynamics 365</div>
+          </div>
+
+          <div class="workload-cat-title">Productivity & Collaboration</div>
+          <div class="workload-grid">
+            <div class="workload-pill" data-tip="Atlassian Jira Cloud — backup of issues, projects, workflows, attachments, and configuration for SaaS-hosted project tracking and agile management."><span class="dot"></span>Atlassian Jira</div>
+            <div class="workload-pill" data-tip="Google Workspace — protection for Gmail, Google Drive, Calendar, Contacts, and shared drives with item-level granular recovery."><span class="dot"></span>Google Workspace</div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -529,7 +870,7 @@
       <div class="slide-content">
         <div class="slide-eyebrow" style="color:#f472b6">// 04 — Identity Protection · Active Directory & Entra ID</div>
         <h2 class="slide-title">Identity Recovery<br><span style="color:#f472b6">& Resilience</span></h2>
-        <p class="slide-subtitle">Par Pacific's on-prem Enterprise and cloud Foundation licenses protect AD and Entra ID users and groups — but provide no orchestrated forest recovery, Entra ID enhanced protection, or proactive identity threat detection.</p>
+        <p class="slide-subtitle">Par Pacific's existing M365, Data Center, and Cloud licenses cover basic AD and Entra ID user/group protection — but advanced operational recovery, cyber recovery, and cyber resilience capabilities require dedicated Identity SKUs.</p>
         <div class="alert-banner blue" style="margin:0">
           <div class="alert-icon">🔑</div>
           <div class="alert-text"><strong>Identity is the #1 Ransomware Attack Vector</strong> AD compromise is the most common lateral movement path in enterprise ransomware. Par Pacific has no orchestrated forest recovery capability today. A single forest outage could halt all on-prem operations.</div>
@@ -537,37 +878,110 @@
       </div>
     </div>
     <div class="slide-body">
+
+      <!-- TABLE 1: Editions Overview -->
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:0.4rem;">Rubrik Editions — Identity Capabilities by License</h3>
+      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1.2rem;line-height:1.6;">Identity capabilities are progressively unlocked across operational recovery, cyber recovery, and cyber resilience tiers. Par Pacific's existing licenses cover only the operational baseline.</p>
+
       <div class="compare-wrap">
         <table class="compare-table">
           <thead>
             <tr>
-              <th class="feature-col" style="width:28%">Capability</th>
-              <th style="border-top:2px solid var(--rubrik-cyan)">On-Prem<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Enterprise Ed. (Owned)</span></th>
-              <th style="border-top:2px solid var(--accent3)">Cloud (AWS)<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">Foundation Ed. (Owned)</span></th>
+              <th class="feature-col" style="width:34%">Capability</th>
+              <th>M365<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">All Licenses</span></th>
+              <th>Data Center<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">All Licenses</span></th>
+              <th>Cloud<br><span style="font-size:0.7rem;font-weight:400;color:var(--text2)">All Licenses</span></th>
               <th class="upgrade">Identity Recovery<br><span class="badge-upgrade">NOT OWNED</span></th>
               <th class="upgrade" style="border-top-color:#f472b6">Identity Resilience<br><span class="badge-upgrade">NOT OWNED</span></th>
             </tr>
           </thead>
           <tbody>
-            <tr><td colspan="5" class="feature-cat">Active Directory (On-Prem)</td></tr>
-            <tr><td class="feature-name">AD Users & Groups Protection</td><td class="center"><span class="check">✔</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr><td class="feature-name">AD Object-Level Recovery</td><td class="center"><span class="check">✔</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Orchestrated AD Forest Recovery</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">AD Change Monitoring & Rollback</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Continuous AD Replication Monitoring</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">AD Threat Detection & Alerting</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr><td colspan="5" class="feature-cat">Entra ID (Azure AD)</td></tr>
-            <tr><td class="feature-name">Entra ID Users & Groups Protection</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Entra ID Enhanced Protection</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Conditional Access Policy Recovery</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Hybrid AD + Entra Unified Recovery</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td><td class="center"><span class="check">✔</span></td></tr>
-            <tr class="highlight-row"><td class="feature-name">Entra ID Threat Detection & Alerting</td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="cross">—</span></td><td class="center"><span class="check">✔</span></td></tr>
+            <tr><td colspan="6" class="feature-cat">Operational Recovery</td></tr>
+            <tr>
+              <td><span class="feature-name has-tip" data-tip="Granularly recover Entra ID users, groups and roles. Why it matters: Day-to-day recovery from accidental deletions, misconfigurations, or user errors — restore individual identities without disrupting the broader directory.">Entra ID: Users, Groups and Roles</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+            <tr>
+              <td><span class="feature-name has-tip" data-tip="Granularly recover objects or perform domain-level recovery for AD users, groups, containers, OUs, and computers. Why it matters: Most identity issues happen at the object level — surgical recovery prevents wholesale disruption from minor mistakes.">Active Directory: Users, Groups, Containers, OUs, Computers</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+
+            <tr><td colspan="6" class="feature-cat">Cyber Recovery (Identity SKU Required)</td></tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Granularly recover Enterprise Apps (and linked app registrations) and Conditional Access Policies. Why it matters: These artifacts control how users access cloud applications. If wiped or corrupted by an attacker, business-critical SaaS access can be lost — and rebuilding them manually can take weeks.">Entra ID: Enterprise Apps, App Registrations, Conditional Access Policies</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Perform AD Forest Recovery that automates 20+ steps. Why it matters: Manual AD forest recovery from Microsoft's documented procedure can take weeks and is highly error-prone. Automation collapses recovery time from weeks to hours during a ransomware incident — when every minute of downtime costs the business.">Active Directory: Forest Recovery</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Easily identify and compare attribute changes between live and backed-up AD objects. Why it matters: When an account is compromised, you need to know exactly what changed. Live object comparison shows attribute drift instantly so you can pinpoint malicious modifications without guesswork.">Active Directory: Live Object Comparison</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Everyday, selective recovery of object attributes (e.g., a single user's login scripts). Why it matters: You shouldn't have to roll back an entire user object to undo one bad attribute change. Attribute-level restore lets you fix a single field — preserving recent legitimate changes while reverting the bad one.">Active Directory: Attribute Restore</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Streamline recovery across your AD and Entra ID environments on a single platform. Why it matters: Most enterprises run hybrid identity. Without unified recovery, you're juggling separate tools, separate processes, and separate teams during a crisis — slowing recovery and inviting mistakes.">Hybrid Recovery</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+
+            <tr><td colspan="6" class="feature-cat">Cyber Resilience (Identity Resilience Only)</td></tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Continuously assess human and non-human identity risks across AD and Entra ID. Why it matters: Service accounts, OAuth apps, and stale identities are major attack vectors that go unnoticed in traditional security tooling. Surfacing these risks proactively prevents compromise before it happens.">Active Directory & Entra ID: Human & Non-Human Identity Risks</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
+            <tr class="highlight-row">
+              <td><span class="feature-name has-tip" data-tip="Continuous monitoring of Group Policy Objects and privileged user activity. Why it matters: GPOs and privileged accounts are top targets — attackers use them to push malicious policies or escalate privilege. Real-time monitoring catches suspicious changes before they spread across the domain.">Active Directory: Group Policy Object & Privilege User Monitoring</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="cross">—</span></td>
+              <td class="center"><span class="check">✔</span></td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <div class="callout-grid">
-        <div class="callout upgrade"><div class="callout-icon">🛡️</div><div class="callout-title">Identity Recovery SKU</div><div class="callout-body">Adds orchestrated forest-level recovery, Entra ID enhanced protection, conditional access policy recovery, and hybrid identity restoration — critical for ransomware scenarios.</div></div>
-        <div class="callout upgrade"><div class="callout-icon">🔭</div><div class="callout-title">Identity Resilience SKU</div><div class="callout-body">Everything in Identity Recovery, plus proactive threat detection: continuous AD replication monitoring, change alerting, and Entra ID anomaly detection to stop attacks before they succeed.</div></div>
+
+      <!-- TABLE 2 removed -->
+
+      <div class="callout-grid" style="margin-top:2rem">
+        <div class="callout upgrade"><div class="callout-icon">🛡️</div><div class="callout-title">Identity Recovery SKU</div><div class="callout-body">Operational + cyber recovery for AD, Entra ID, and Okta. Adds AD Forest Recovery automation, attribute restore, live object comparison, hybrid recovery, and orchestrated recovery to isolated tenants — critical for ransomware scenarios.</div></div>
+        <div class="callout upgrade"><div class="callout-icon">🔭</div><div class="callout-title">Identity Resilience SKU</div><div class="callout-body">Everything in Identity Recovery, plus proactive cyber resilience: identity risk discovery & remediation, near real-time threat detection, tamper-resistant activity logging, one-click action revert, and CrowdStrike NG Identity Security integration.</div></div>
       </div>
     </div>
   </div>
@@ -875,6 +1289,45 @@
 
   function prevSlide() { if (currentSlide > 0) showSlide(currentSlide - 1); }
   function nextSlide() { if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1); }
+
+  function toggleWorkloads() {
+    const btn = document.getElementById('workloads-toggle');
+    const panel = document.getElementById('workloads-panel');
+    btn.classList.toggle('open');
+    panel.classList.toggle('open');
+    const label = btn.querySelector('span:first-child');
+    if (panel.classList.contains('open')) {
+      label.textContent = '☁️ Hide Supported Cloud Workloads';
+    } else {
+      label.textContent = '☁️ Supported Cloud Workloads';
+    }
+  }
+
+  function toggleOnPremWorkloads() {
+    const btn = document.getElementById('onprem-workloads-toggle');
+    const panel = document.getElementById('onprem-workloads-panel');
+    btn.classList.toggle('open');
+    panel.classList.toggle('open');
+    const label = btn.querySelector('span:first-child');
+    if (panel.classList.contains('open')) {
+      label.textContent = '🏢 Hide Supported On-Prem Workloads';
+    } else {
+      label.textContent = '🏢 Supported On-Prem Workloads';
+    }
+  }
+
+  function toggleSaasWorkloads() {
+    const btn = document.getElementById('saas-workloads-toggle');
+    const panel = document.getElementById('saas-workloads-panel');
+    btn.classList.toggle('open');
+    panel.classList.toggle('open');
+    const label = btn.querySelector('span:first-child');
+    if (panel.classList.contains('open')) {
+      label.textContent = '📨 Hide Supported SaaS Workloads';
+    } else {
+      label.textContent = '📨 Supported SaaS Workloads';
+    }
+  }
 
   // Keyboard navigation
   document.addEventListener('keydown', e => {
